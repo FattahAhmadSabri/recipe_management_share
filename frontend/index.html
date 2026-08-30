@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Register</title>
+  </head>
+
+  <body>
+    <form onsubmit="handleRegister(event)">
+      <label for="name">Name</label>
+      <input id="name" type="text" required />
+
+      <br />
+
+      <label for="email">Email</label>
+      <input id="email" type="email" required />
+
+      <br />
+
+      <label for="password">Password</label>
+      <input id="password" type="password" required />
+
+      <br />
+
+      <button type="submit">Register</button>
+    </form>
+    <a href="./login/login.html">Login</a>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="index.js"></script>
+  </body>
+</html>

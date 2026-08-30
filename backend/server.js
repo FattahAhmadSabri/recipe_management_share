@@ -1,5 +1,6 @@
 const express = require("express")
 const dotenv = require("dotenv")
+const cors = require("cors")
 dotenv.config()
 const sequelize = require("./utils/dbConfig")
 const userRoute = require("./routes/userRoute")
@@ -7,6 +8,7 @@ const userRoute = require("./routes/userRoute")
 const port = 4500
 const app = express()
 app.use(express.json())
+app.use(cors())
 
 app.get("/", (req,res)=>{
     res.send("server is working")

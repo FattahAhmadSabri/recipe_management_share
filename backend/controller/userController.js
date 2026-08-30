@@ -14,9 +14,9 @@ const addUserController = async (req, res) => {
     const { name, email, password } = req.body;
 
     const response = await addUserService(name, email, password);
-    return successResponse(res, response, "User created successfully", 201);
+    return successResponse(res, 201, "User added successfully", response);
   } catch (error) {
-    return errorResponse(res, error.message, 500);
+    return errorResponse(res, 500, error.message);
   }
 };
 
@@ -30,7 +30,7 @@ const loginController = async (req, res) => {
     return successResponse(
       res,
       200,
-      "User updated successfully",
+      "User loggedin successfully",
       response,
       token,
     );
@@ -44,7 +44,7 @@ const updateUserController = async (req, res) => {
     const userId = req.user.id;
     const { name, password } = req.body;
     const response = await updateUserByIdService(userId, name, password);
-    return successResponse(res, 201, "User updated successfully", response);
+    return successResponse(res, 200, "User updated successfully", response);
   } catch (error) {
     return errorResponse(res, 500, error.message);
   }
