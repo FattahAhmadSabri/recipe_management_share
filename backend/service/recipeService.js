@@ -1,8 +1,8 @@
-const { Recipe } = require("../model/index");
+const { Recipe, MainIngredient, RecipeType } = require("../model/index");
 const sequelize = require("../utils/dbConfig");
 const { PutObjectCommand } = require("@aws-sdk/client-s3");
 const s3 = require("../utils/s3Config");
-const { uploadImage } = require("./s3Service")
+const { uploadImage } = require("./s3Service");
 
 const addRecipeService = async (
   recipeName,
@@ -28,6 +28,28 @@ const addRecipeService = async (
   const transaction = await sequelize.transaction();
 
   try {
+    const mainIngredientData = await MainIngredient.findOne({
+      where: {
+        name: mainIngredient,
+      },
+      transaction,
+    });
+
+    if (!mainIngredientData) {
+      throw new Error("Invalid main ingredient");
+    }
+
+    const recipeTypeData = await RecipeType.findOne({
+      where: {
+        name: recipeType,
+      },
+      transaction,
+    });
+
+    if (!recipeTypeData) {
+      throw new Error("Invalid recipe type");
+    }
+
     const imageKey = `recipes/${Date.now()}-${file.originalname}`;
 
     const command = new PutObjectCommand({
@@ -46,8 +68,10 @@ const addRecipeService = async (
         ingredients,
         method,
         cuisine,
-        mainIngredient,
-        recipeType,
+
+        mainIngredientId: mainIngredientData.id,
+        recipeTypeId: recipeTypeData.id,
+
         cookingTime,
         preparationTime,
         marinationTime,
@@ -71,6 +95,7 @@ const addRecipeService = async (
     return response;
   } catch (error) {
     await transaction.rollback();
+
     throw error;
   }
 };
@@ -79,8 +104,6 @@ const getRecipeService = () => {
   const response = Recipe.findAll();
   return response;
 };
-
-
 
 const updateRecipeService = async (
   userId,
@@ -127,7 +150,6 @@ const updateRecipeService = async (
       notes,
     };
 
-   
     if (file) {
       const imageKey = await uploadImage(file);
 

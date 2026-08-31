@@ -9,6 +9,8 @@ app.use(cors());
 const sequelize = require("./utils/dbConfig");
 const userRoute = require("./routes/userRoute");
 const recipeRoute = require("./routes/recipeRoute");
+const mainIngredientRoute = require("./routes/mainIgredientRoutes");
+const recipeTypeRoute = require("./routes/recipeTypeRoute");
 
 app.get("/", (req, res) => {
   res.send("server is working");
@@ -16,8 +18,10 @@ app.get("/", (req, res) => {
 
 app.use("/", userRoute);
 app.use("/", recipeRoute);
+app.use("/", mainIngredientRoute);
+app.use("/", recipeTypeRoute);
 sequelize
-  .sync()
+  .sync({ alter: true })
   .then(() => {
     app.listen(port, () => {
       console.log("server is connected");

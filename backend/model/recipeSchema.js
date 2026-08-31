@@ -1,4 +1,5 @@
 const { DataTypes } = require("sequelize");
+
 const sequelize = require("../utils/dbConfig");
 
 const Recipe = sequelize.define("recipe", {
@@ -30,20 +31,6 @@ const Recipe = sequelize.define("recipe", {
   },
 
   cuisine: {
-    type: DataTypes.STRING,
-    allowNull: true,
-  },
-
-  mainIngredient: {
-    type: DataTypes.STRING,
-    allowNull: false,
-  },
-  ingredients: {
-    type: DataTypes.STRING,
-    allowNull: true,
-  },
-
-  recipeType: {
     type: DataTypes.STRING,
     allowNull: true,
   },
