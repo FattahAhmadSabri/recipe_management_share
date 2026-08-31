@@ -1,0 +1,308 @@
+<div class="recipe-section">
+
+  <h2>Post A Recipe</h2>
+
+  <form class="recipe-form"  onsubmit="handleRecipeForm(event)">
+
+    <!-- Recipe Name -->
+    <div class="form-group">
+      <label for="recipeName">
+        Recipe Name <span class="required">*</span>
+      </label>
+
+      <input
+        type="text"
+        id="recipeName"
+        name="recipeName"
+        placeholder="Enter recipe name"
+        required
+      />
+    </div>
+
+
+    <!-- Description -->
+    <div class="form-group">
+      <label for="description">
+        Description
+      </label>
+
+      <textarea
+        id="description"
+        name="description"
+        placeholder="Describe your recipe..."
+      ></textarea>
+    </div>
+
+
+    <!-- Ingredients -->
+    <div class="form-group">
+      <label for="ingredients">
+        Ingredients <span class="required">*</span>
+      </label>
+
+      <textarea
+        id="ingredients"
+        name="ingredients"
+        placeholder="Enter ingredients..."
+        required
+      ></textarea>
+    </div>
+
+
+    <!-- Main Ingredient -->
+    <div class="form-group">
+      <label for="mainIngredient">
+        Main Ingredient <span class="required">*</span>
+      </label>
+
+      <input
+        type="text"
+        id="mainIngredient"
+        name="mainIngredient"
+        placeholder="Example: Chicken, Paneer, Rice"
+        required
+      />
+    </div>
+
+
+    <!-- Method -->
+    <div class="form-group">
+      <label for="method">
+        Method <span class="required">*</span>
+      </label>
+
+      <textarea
+        id="method"
+        name="method"
+        placeholder="Explain how to prepare the recipe..."
+        required
+      ></textarea>
+    </div>
+
+
+    <!-- Cuisine -->
+    <div class="form-group">
+      <label for="cuisine">
+        Cuisine
+      </label>
+
+      <input
+        type="text"
+        id="cuisine"
+        name="cuisine"
+        placeholder="Example: Indian, Italian, Chinese"
+      />
+    </div>
+
+
+    <!-- Recipe Type -->
+    <div class="form-group">
+      <label for="recipeType">
+        Recipe Type
+      </label>
+
+      <select id="recipeType" name="recipeType">
+
+        <option value="">Select recipe type</option>
+
+        <option value="breakfast">Breakfast</option>
+
+        <option value="lunch">Lunch</option>
+
+        <option value="dinner">Dinner</option>
+
+        <option value="dessert">Dessert</option>
+
+        <option value="snacks">Snacks</option>
+
+      </select>
+    </div>
+
+
+    <!-- Cooking Time -->
+    <div class="form-group">
+      <label for="cookingTime">
+        Cooking Time
+      </label>
+
+      <input
+        type="text"
+        id="cookingTime"
+        name="cookingTime"
+        placeholder="Example: 30 minutes"
+      />
+    </div>
+
+
+    <!-- Preparation Time -->
+    <div class="form-group">
+      <label for="preparationTime">
+        Preparation Time
+      </label>
+
+      <input
+        type="text"
+        id="preparationTime"
+        name="preparationTime"
+        placeholder="Example: 15 minutes"
+      />
+    </div>
+
+
+    <!-- Marination Time -->
+    <div class="form-group">
+      <label for="marinationTime">
+        Marination Time
+      </label>
+
+      <input
+        type="text"
+        id="marinationTime"
+        name="marinationTime"
+        placeholder="Example: 1 hour"
+      />
+    </div>
+
+
+    <!-- Soaking Time -->
+    <div class="form-group">
+      <label for="soakingTime">
+        Soaking Time
+      </label>
+
+      <input
+        type="text"
+        id="soakingTime"
+        name="soakingTime"
+        placeholder="Example: 30 minutes"
+      />
+    </div>
+
+
+    <!-- Serves -->
+    <div class="form-group">
+      <label for="serves">
+        Serves
+      </label>
+
+      <input
+        type="text"
+        id="serves"
+        name="serves"
+        placeholder="Example: 4 people"
+      />
+    </div>
+
+
+    <!-- Makes -->
+    <div class="form-group">
+      <label for="makes">
+        Makes
+      </label>
+
+      <input
+        type="text"
+        id="makes"
+        name="makes"
+        placeholder="Example: 10 pieces"
+      />
+    </div>
+
+
+    <!-- Other Names -->
+    <div class="form-group">
+      <label for="otherNames">
+        Other Names
+      </label>
+
+      <input
+        type="text"
+        id="otherNames"
+        name="otherNames"
+        placeholder="Other names of this recipe"
+      />
+    </div>
+
+
+    <!-- Tags -->
+    <div class="form-group">
+      <label for="tags">
+        Tags
+      </label>
+
+      <input
+        type="text"
+        id="tags"
+        name="tags"
+        placeholder="Example: spicy, healthy, quick"
+      />
+    </div>
+
+
+    <!-- Keywords -->
+    <div class="form-group">
+      <label for="keywords">
+        Keywords
+      </label>
+
+      <input
+        type="text"
+        id="keywords"
+        name="keywords"
+        placeholder="Example: paneer, curry, Indian"
+      />
+    </div>
+
+
+    <!-- Source -->
+    <div class="form-group">
+      <label for="source">
+        Source
+      </label>
+
+      <input
+        type="text"
+        id="source"
+        name="source"
+        placeholder="Recipe source"
+      />
+    </div>
+
+
+    <!-- Notes -->
+    <div class="form-group">
+      <label for="notes">
+        Notes
+      </label>
+
+      <textarea
+        id="notes"
+        name="notes"
+        placeholder="Additional notes..."
+      ></textarea>
+    </div>
+
+
+    <!-- Image -->
+    <div class="form-group">
+      <label for="image">
+        Recipe Image
+      </label>
+
+      <input
+        type="file"
+        id="image"
+        name="image"
+        accept="image/*"
+      />
+    </div>
+
+
+    <button type="submit">
+      Share Recipe
+    </button>
+
+  </form>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script src="./share-recipe.js"></script>
+</div>
