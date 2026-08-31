@@ -1,12 +1,10 @@
-const recipeList = document.getElementById("recipe-list");
-
 console.log("home.js is running");
+
+const recipeList = document.getElementById("recipe-list");
 
 axios
   .get("http://localhost:4500/recipe")
-
   .then((response) => {
-
     console.log("API response:", response.data);
 
     const recipes = response.data.data;
@@ -14,13 +12,12 @@ axios
     recipeList.innerHTML = "";
 
     recipes.forEach((recipe) => {
-
       recipeList.innerHTML += `
 
         <article class="recipe-card">
 
           <img
-            src="$http://localhost:4500/${recipe.image}"
+            src="http://localhost:4500/${recipe.image}"
             alt="${recipe.recipeName}"
             class="recipe-image"
           />
@@ -48,15 +45,12 @@ axios
 
       `;
     });
-
   })
 
   .catch((error) => {
-
     console.log("API error:", error);
 
     recipeList.innerHTML = `
       <p>Unable to load recipes.</p>
     `;
-
   });

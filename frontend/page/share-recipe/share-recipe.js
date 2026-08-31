@@ -1,38 +1,58 @@
-const api = "http://localhost:4500/recipe";
+const recipesApi = "http://localhost:4500/recipe";
 
-const token = localStorage.getItem("token");
+async function checkLogin() {
+  const token = localStorage.getItem("token");
 
-if (!token) {
-  alert("Please login first");
-  return;
+  const loginContainer = document.getElementById("login-container");
+  const recipeContainer = document.getElementById("recipe-container");
+
+  console.log("Token:", token);
+
+  // No token
+  if (!token) {
+    recipeContainer.style.display = "none";
+    loginContainer.style.display = "block";
+
+    const response = await fetch("./page/login_register/login.html");
+
+    const html = await response.text();
+
+    loginContainer.innerHTML = html;
+
+    return;
+  }
+
+  // Token exists
+  loginContainer.style.display = "none";
+  recipeContainer.style.display = "block";
 }
 
-const handleRecipeForm = async (event) => {
+checkLogin();
+
+async function handleRecipeForm(event) {
   event.preventDefault();
 
+  const token = localStorage.getItem("token");
+
+  const form = event.target;
+
+  const formData = new FormData(form);
+
   try {
-    const form = event.target;
-
-    const formData = new FormData(form);
-
-    const response = await axios.post(api, formData, {
+    const response = await axios.post(recipesApi, formData, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
     });
 
-    console.log("Recipe added:", response.data);
+    console.log(response.data);
 
-    // alert("Recipe shared successfully!");
+    alert("Recipe shared successfully");
 
     form.reset();
   } catch (error) {
-    console.error("Recipe error:", error);
+    console.log(error);
 
     alert("Failed to share recipe");
   }
-};
-
-const form = document.querySelector(".recipe-form");
-
-form.addEventListener("submit", handleRecipeForm);
+}

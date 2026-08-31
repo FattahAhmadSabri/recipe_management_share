@@ -24,9 +24,16 @@ const loginController = async (req, res) => {
   try {
     const { email, password } = req.body;
     const response = await loginService(email, password);
-    const token = jwt.sign({ id: response.id }, process.env.JWT_SECRET, {
-      expiresIn: "10h",
-    });
+    const token = jwt.sign(
+      {
+        id: response.id,
+        role: response.role,
+      },
+      process.env.JWT_SECRET,
+      {
+        expiresIn: "1d",
+      },
+    );
     return successResponse(
       res,
       200,
@@ -35,7 +42,7 @@ const loginController = async (req, res) => {
       token,
     );
   } catch (error) {
-    return errorResponse(res, error.message, 500);
+    return errorResponse(res, 500, error.message);
   }
 };
 

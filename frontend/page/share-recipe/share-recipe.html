@@ -1,9 +1,34 @@
-<div class="recipe-section">
+<!-- Login section -->
+<section id="login-container" class="login-container" style="display: none">
+  <h2>Login</h2>
 
+  <form id="login-form">
+    <div class="form-group">
+      <label for="email">Email</label>
+
+      <input type="email" id="email" required placeholder="Enter your email" />
+    </div>
+
+    <div class="form-group">
+      <label for="password">Password</label>
+
+      <input
+        type="password"
+        id="password"
+        required
+        placeholder="Enter your password"
+      />
+    </div>
+
+    <button type="submit">Login</button>
+  </form>
+</section>
+
+<!-- Recipe section -->
+<section id="recipe-container" class="recipe-section" style="display: none">
   <h2>Post A Recipe</h2>
 
-  <form class="recipe-form"  onsubmit="handleRecipeForm(event)">
-
+  <form class="recipe-form" onsubmit="handleRecipeForm(event)">
     <!-- Recipe Name -->
     <div class="form-group">
       <label for="recipeName">
@@ -19,12 +44,9 @@
       />
     </div>
 
-
     <!-- Description -->
     <div class="form-group">
-      <label for="description">
-        Description
-      </label>
+      <label for="description"> Description </label>
 
       <textarea
         id="description"
@@ -32,7 +54,6 @@
         placeholder="Describe your recipe..."
       ></textarea>
     </div>
-
 
     <!-- Ingredients -->
     <div class="form-group">
@@ -47,7 +68,6 @@
         required
       ></textarea>
     </div>
-
 
     <!-- Main Ingredient -->
     <div class="form-group">
@@ -64,12 +84,9 @@
       />
     </div>
 
-
     <!-- Method -->
     <div class="form-group">
-      <label for="method">
-        Method <span class="required">*</span>
-      </label>
+      <label for="method"> Method <span class="required">*</span> </label>
 
       <textarea
         id="method"
@@ -79,12 +96,9 @@
       ></textarea>
     </div>
 
-
     <!-- Cuisine -->
     <div class="form-group">
-      <label for="cuisine">
-        Cuisine
-      </label>
+      <label for="cuisine"> Cuisine </label>
 
       <input
         type="text"
@@ -94,36 +108,23 @@
       />
     </div>
 
-
     <!-- Recipe Type -->
     <div class="form-group">
-      <label for="recipeType">
-        Recipe Type
-      </label>
+      <label for="recipeType"> Recipe Type </label>
 
       <select id="recipeType" name="recipeType">
-
         <option value="">Select recipe type</option>
-
         <option value="breakfast">Breakfast</option>
-
         <option value="lunch">Lunch</option>
-
         <option value="dinner">Dinner</option>
-
         <option value="dessert">Dessert</option>
-
         <option value="snacks">Snacks</option>
-
       </select>
     </div>
 
-
     <!-- Cooking Time -->
     <div class="form-group">
-      <label for="cookingTime">
-        Cooking Time
-      </label>
+      <label for="cookingTime"> Cooking Time </label>
 
       <input
         type="text"
@@ -133,12 +134,9 @@
       />
     </div>
 
-
     <!-- Preparation Time -->
     <div class="form-group">
-      <label for="preparationTime">
-        Preparation Time
-      </label>
+      <label for="preparationTime"> Preparation Time </label>
 
       <input
         type="text"
@@ -148,12 +146,9 @@
       />
     </div>
 
-
     <!-- Marination Time -->
     <div class="form-group">
-      <label for="marinationTime">
-        Marination Time
-      </label>
+      <label for="marinationTime"> Marination Time </label>
 
       <input
         type="text"
@@ -163,12 +158,9 @@
       />
     </div>
 
-
     <!-- Soaking Time -->
     <div class="form-group">
-      <label for="soakingTime">
-        Soaking Time
-      </label>
+      <label for="soakingTime"> Soaking Time </label>
 
       <input
         type="text"
@@ -178,12 +170,9 @@
       />
     </div>
 
-
     <!-- Serves -->
     <div class="form-group">
-      <label for="serves">
-        Serves
-      </label>
+      <label for="serves"> Serves </label>
 
       <input
         type="text"
@@ -193,12 +182,9 @@
       />
     </div>
 
-
     <!-- Makes -->
     <div class="form-group">
-      <label for="makes">
-        Makes
-      </label>
+      <label for="makes"> Makes </label>
 
       <input
         type="text"
@@ -208,12 +194,9 @@
       />
     </div>
 
-
     <!-- Other Names -->
     <div class="form-group">
-      <label for="otherNames">
-        Other Names
-      </label>
+      <label for="otherNames"> Other Names </label>
 
       <input
         type="text"
@@ -223,12 +206,9 @@
       />
     </div>
 
-
     <!-- Tags -->
     <div class="form-group">
-      <label for="tags">
-        Tags
-      </label>
+      <label for="tags"> Tags </label>
 
       <input
         type="text"
@@ -238,12 +218,9 @@
       />
     </div>
 
-
     <!-- Keywords -->
     <div class="form-group">
-      <label for="keywords">
-        Keywords
-      </label>
+      <label for="keywords"> Keywords </label>
 
       <input
         type="text"
@@ -253,12 +230,9 @@
       />
     </div>
 
-
     <!-- Source -->
     <div class="form-group">
-      <label for="source">
-        Source
-      </label>
+      <label for="source"> Source </label>
 
       <input
         type="text"
@@ -268,12 +242,9 @@
       />
     </div>
 
-
     <!-- Notes -->
     <div class="form-group">
-      <label for="notes">
-        Notes
-      </label>
+      <label for="notes"> Notes </label>
 
       <textarea
         id="notes"
@@ -282,27 +253,13 @@
       ></textarea>
     </div>
 
-
     <!-- Image -->
     <div class="form-group">
-      <label for="image">
-        Recipe Image
-      </label>
+      <label for="image"> Recipe Image </label>
 
-      <input
-        type="file"
-        id="image"
-        name="image"
-        accept="image/*"
-      />
+      <input type="file" id="image" name="image" accept="image/*" />
     </div>
 
-
-    <button type="submit">
-      Share Recipe
-    </button>
-
+    <button type="submit">Share Recipe</button>
   </form>
-  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-  <script src="./share-recipe.js"></script>
-</div>
+</section>
