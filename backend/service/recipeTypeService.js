@@ -4,4 +4,9 @@ const addRecipeTypeService = (data) => {
   return RecipeType.bulkCreate(data);
 };
 
-module.exports = {addRecipeTypeService};
+const getRecipeTypeService = ()=>{
+  const response = RecipeType.findAll()
+  return response
+}
+
+module.exports = {addRecipeTypeService, getRecipeTypeService};

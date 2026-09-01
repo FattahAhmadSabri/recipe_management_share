@@ -6,4 +6,9 @@ const addMainIngrdients=(data)=>{
     return response
 }
 
-module.exports=addMainIngrdients
+
+const getMainIngredients =()=>{
+    const response = MainIngredient.findAll()
+    return response
+}
+module.exports={addMainIngrdients,getMainIngredients }

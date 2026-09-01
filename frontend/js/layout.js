@@ -1,6 +1,5 @@
 async function loadComponent(id, file) {
   const response = await fetch(file);
-
   const html = await response.text();
 
   document.getElementById(id).innerHTML = html;
@@ -13,7 +12,24 @@ loadComponent("header", "./components/header/header.html");
 loadComponent("navbar", "./components/navbar/navbar.html");
 
 // Sidebar
-loadComponent("sidebar", "./components/sidebar/sidebar.html");
+loadComponent("sidebar", "./components/sidebar/sidebar.html").then(() => {
+  const script = document.createElement("script");
+
+  script.src = "./components/sidebar/sidebar.js";
+
+  document.body.appendChild(script);
+});
+
+// Recent View - GLOBAL
+loadComponent("recent-view", "./components/recent-view/recentView.html").then(
+  () => {
+    const script = document.createElement("script");
+
+    script.src = "./components/recent-view/recentView.js";
+
+    document.body.appendChild(script);
+  },
+);
 
 // Footer
 loadComponent("footer", "./components/footer/footer.html");
@@ -21,18 +37,15 @@ loadComponent("footer", "./components/footer/footer.html");
 // Load Page
 async function loadPage(file) {
   const response = await fetch(file);
-
   const html = await response.text();
 
   document.getElementById("page-content").innerHTML = html;
 
-  // Load page JS as MODULE
   const scriptFile = file.replace(".html", ".js");
 
   const script = document.createElement("script");
 
   script.type = "module";
-
   script.src = scriptFile + "?time=" + Date.now();
 
   document.body.appendChild(script);

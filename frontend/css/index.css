@@ -387,3 +387,39 @@ body {
     }
 
 }
+
+.recent-view-container {
+  background-color: #f0efff;
+  padding: 25px 10px 100px;
+  text-align: center;
+}
+
+.recent-view-container h1 {
+  font-size: 32px;
+  font-weight: normal;
+  margin: 0 0 35px;
+}
+
+#recent-view-list {
+  display: flex;
+  gap: 28px;
+  justify-content: center;
+}
+
+.recent-recipe {
+  width: 160px;
+  text-align: center;
+}
+
+.recent-recipe img {
+  width: 160px;
+  height: 160px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.recent-recipe h3 {
+  color: darkred;
+  font-size: 17px;
+  margin-top: 12px;
+}

@@ -3,9 +3,11 @@
  */
 
 // Get Main Ingredients
+
+const api = "http://localhost:4500"
 const getMainIngredients = async () => {
   try {
-    const response = await axios.get(getApiUrl("MAIN_INGREDIENTS"));
+    const response = await axios.get(`${api}/main`);
 
     const ingredients = response.data.data;
 
@@ -34,7 +36,7 @@ const getMainIngredients = async () => {
 // Get Recipe Types
 const getRecipeTypes = async () => {
   try {
-    const response = await axios.get(getApiUrl("RECIPE_TYPES"));
+    const response = await axios.get(`${api}/recipe-type`);
 
     const recipeTypes = response.data.data;
 
