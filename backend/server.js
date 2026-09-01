@@ -11,6 +11,7 @@ const userRoute = require("./routes/userRoute");
 const recipeRoute = require("./routes/recipeRoute");
 const mainIngredientRoute = require("./routes/mainIgredientRoutes");
 const recipeTypeRoute = require("./routes/recipeTypeRoute");
+const replyRoute = require("./routes/replyRoute");
 
 app.get("/", (req, res) => {
   res.send("server is working");
@@ -20,8 +21,9 @@ app.use("/", userRoute);
 app.use("/", recipeRoute);
 app.use("/", mainIngredientRoute);
 app.use("/", recipeTypeRoute);
+app.use("/", replyRoute);
 sequelize
-  .sync({ alter: true })
+  .sync()
   .then(() => {
     app.listen(port, () => {
       console.log("server is connected");
