@@ -3,11 +3,13 @@ const {
   errorResponse,
 } = require("../middleware/responseHandlingMiddleware");
 const Recipe = require("../model/recipeSchema");
+const { addRecentView } = require("../service/recentViewService");
 const {
   addRecipeService,
   getRecipeService,
   updateRecipeService,
 } = require("../service/recipeService");
+const sequelize = require("../utils/dbConfig");
 
 const addRecipeController = async (req, res) => {
   try {
@@ -123,8 +125,54 @@ const updateRecipeController = async (req, res) => {
   }
 };
 
+const getRecipeByIdController = async (req, res) => {
+  const transaction = await sequelize.transaction();
+
+  try {
+    const ipAddress = req.ip;
+    const recipeId = req.params.id;
+    const userId = req.user?.id || null;
+
+    const response = await Recipe.findOne({
+      where: {
+        id: recipeId,
+      },
+      transaction,
+    });
+
+    if (!response) {
+      await transaction.rollback();
+
+      return errorResponse(res, 404, "Recipe not found");
+    }
+
+    await addRecentView(
+      recipeId,
+      userId,
+      ipAddress,
+      transaction
+    );
+
+    await transaction.commit();
+
+    return successResponse(
+      res,
+      200,
+      "Recipe fetched successfully",
+      response
+    );
+
+  } catch (error) {
+    await transaction.rollback();
+
+    return errorResponse(res, 500, error.message);
+  }
+};
+
+
 module.exports = {
   addRecipeController,
   getRecipeController,
   updateRecipeController,
+  getRecipeByIdController
 };

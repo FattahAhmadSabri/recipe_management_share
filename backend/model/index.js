@@ -2,7 +2,8 @@ const User = require("../model/userSchema");
 const Recipe = require("../model/recipeSchema");
 const MainIngredient = require("../model/mainIngredientSchema");
 const RecipeType = require("./recipeTypeSchema");
-const Reply = require("./replySchema")
+const Reply = require("./replySchema");
+const RecentView = require("./recentViewRecipeSchema");
 
 
 
@@ -50,6 +51,23 @@ Reply.belongsTo(Recipe,{
   foreignKey: "recipeId"
 })
 
+Recipe.hasMany(RecentView,{
+  foreignKey: "recipeId"
+})
+
+RecentView.belongsTo(Recipe,{
+  foreignKey : "recipeId"
+})
+
+User.hasMany(RecentView,{
+  foreignKey: "userId"
+})
+
+RecentView.belongsTo(User, {
+  foreignKey: "userId"
+})
+
+
 
 
 
@@ -58,5 +76,6 @@ module.exports = {
   Recipe,
   MainIngredient,
   RecipeType,
-  Reply
+  Reply,
+  RecentView
 };

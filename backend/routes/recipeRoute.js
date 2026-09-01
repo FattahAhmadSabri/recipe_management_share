@@ -3,6 +3,7 @@ const {
   addRecipeController,
   getRecipeController,
   updateRecipeController,
+  getRecipeByIdController,
 } = require("../controller/recipeController");
 const authMiddleware = require("../middleware/authMiddleware");
 const authorizeRoles = require("../middleware/roleMiddleware");
@@ -17,9 +18,9 @@ router.post(
   addRecipeController,
 );
 
+router.get("/recipe/:id", getRecipeByIdController);
 
 router.get("/recipe", getRecipeController);
-
 
 router.put(
   "/recipe/:id",
