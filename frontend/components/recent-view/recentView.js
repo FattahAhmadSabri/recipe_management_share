@@ -25,7 +25,11 @@ const displayData = (data) => {
     div.classList.add("recent-recipe");
 
     div.innerHTML = `
-      <img src="${recipe.image}" alt="${recipe.recipeName}">
+      <img
+  src="https://recipe-share-data.s3.ap-south-1.amazonaws.com/${recipe.image}"
+  alt="${recipe.recipeName}"
+  class="recipe-image"
+/>
       <h3>${recipe.recipeName}</h3>
     `;
 

@@ -24,7 +24,7 @@ const addRecipeService = async (
   source,
   notes,
   file,
-  userId
+  userId,
 ) => {
   const transaction = await sequelize.transaction();
 
@@ -85,7 +85,7 @@ const addRecipeService = async (
         source,
         notes,
         image: imageKey,
-        userId
+        userId,
       },
       {
         transaction,
@@ -102,9 +102,17 @@ const addRecipeService = async (
   }
 };
 
-const getRecipeService = () => {
-  const response = Recipe.findAll();
-  return response;
+const getRecipeService = async () => {
+  const response = await Recipe.findAll();
+
+  return response.map((recipe) => {
+    const data = recipe.toJSON();
+
+    return {
+      ...data,
+      image: `https://${process.env.AWS_BUCKET_NAME}.s3.ap-south-1.amazonaws.com/${data.image}`,
+    };
+  });
 };
 
 const updateRecipeService = async (
@@ -171,12 +179,12 @@ const updateRecipeService = async (
   }
 };
 
-
-const searchRecipeByRecipeNameService = (recipeName)=>{
-     const response = Recipe.findAll({where : {
-      recipeName : recipeName,
-
-     }})
-}
+const searchRecipeByRecipeNameService = (recipeName) => {
+  const response = Recipe.findAll({
+    where: {
+      recipeName: recipeName,
+    },
+  });
+};
 
 module.exports = { addRecipeService, getRecipeService, updateRecipeService };

@@ -17,10 +17,10 @@ axios
         <article class="recipe-card">
 
           <img
-            src="http://localhost:4500/${recipe.image}"
-            alt="${recipe.recipeName}"
-            class="recipe-image"
-          />
+src="${recipe.image}"
+alt="${recipe.recipeName}"
+class="recipe-image"
+/>
 
           <h2 class="recipe-title">
             ${recipe.recipeName}
