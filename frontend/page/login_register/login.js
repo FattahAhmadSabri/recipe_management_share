@@ -1,25 +1,42 @@
 const loginApi = "http://localhost:4500/user/login";
+
 console.log("LOGIN JS LOADED");
-// Use a regular function so it is available globally
+
+const loginForm = document.getElementById("loginForm");
+
+loginForm.addEventListener("submit", handleLogin);
+
 async function handleLogin(event) {
   event.preventDefault();
+
+  console.log("LOGIN FUNCTION CALLED");
 
   const email = document.getElementById("email").value;
   const password = document.getElementById("password").value;
   const message = document.getElementById("message");
 
   try {
-    const response = await axios.post(loginApi, { email, password });
+    console.log("Calling login API...");
 
-    // ✅ Token is at response.data.token (from your backend response)
+    const response = await axios.post(loginApi, {
+      email,
+      password,
+    });
+
+    console.log("Login response:", response.data);
+
     const token = response.data.token;
-    console.log(token);
-    if (!token) throw new Error("Token not found");
+
+    if (!token) {
+      throw new Error("Token not found");
+    }
 
     localStorage.setItem("token", token);
 
-    window.location.href = "../share-recipe/share-recipe.html";
+    window.location.href = "../../index.html";
   } catch (error) {
+    console.error("Login error:", error);
+
     if (error.response) {
       message.innerText = error.response.data?.message || "Login failed";
     } else {

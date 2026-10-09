@@ -34,6 +34,7 @@ const addRecipeController = async (req, res) => {
       notes,
     } = req.body;
     const file = req.file;
+    const userId = req.user.id;
     const response = await addRecipeService(
       recipeName,
       description,
@@ -54,10 +55,12 @@ const addRecipeController = async (req, res) => {
       source,
       notes,
       file,
+      userId,
     );
-
+    console.log("-------------------------",response);
     return successResponse(res, 201, "Recipe added successfully", response);
   } catch (error) {
+    console.log("-------------------------",error.message);
     return errorResponse(res, 500, error.message);
   }
 };
@@ -95,7 +98,7 @@ const updateRecipeController = async (req, res) => {
     } = req.body;
     const userId = req.user.id;
     const file = req.file;
-    const {id }= req.params
+    const { id } = req.params;
     const response = await updateRecipeService(
       recipeName,
       description,
@@ -117,7 +120,7 @@ const updateRecipeController = async (req, res) => {
       notes,
       userId,
       file,
-      id
+      id,
     );
     return successResponse(res, 200, "Recipe updated successfully", response);
   } catch (error) {
@@ -146,22 +149,11 @@ const getRecipeByIdController = async (req, res) => {
       return errorResponse(res, 404, "Recipe not found");
     }
 
-    await addRecentView(
-      recipeId,
-      userId,
-      ipAddress,
-      transaction
-    );
+    await addRecentView(recipeId, userId, ipAddress, transaction);
 
     await transaction.commit();
 
-    return successResponse(
-      res,
-      200,
-      "Recipe fetched successfully",
-      response
-    );
-
+    return successResponse(res, 200, "Recipe fetched successfully", response);
   } catch (error) {
     await transaction.rollback();
 
@@ -169,10 +161,9 @@ const getRecipeByIdController = async (req, res) => {
   }
 };
 
-
 module.exports = {
   addRecipeController,
   getRecipeController,
   updateRecipeController,
-  getRecipeByIdController
+  getRecipeByIdController,
 };

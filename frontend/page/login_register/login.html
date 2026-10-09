@@ -4,29 +4,35 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Login - Recipe Sharing Platform</title>
-    <!-- <link rel="stylesheet" href="../css/index.css" /> -->
   </head>
+
   <body>
     <div class="login-container">
       <h1>Login</h1>
-      <form onsubmit="handleLogin(event)">
+
+      <form id="loginForm">
         <div class="form-group">
           <label for="email">Email:</label>
           <input type="email" id="email" required />
         </div>
+
         <div class="form-group">
           <label for="password">Password:</label>
           <input type="password" id="password" required />
         </div>
+
         <button type="submit">Login</button>
       </form>
-      <script>
-          console.log("INLINE JS WORKING");
-        </scri<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js">
-      </script>
+
+      <p id="message"></p>
+
+      <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
       <script src="./login.js"></script>
-      pt>
-      <p>Don't have an account? <a href="./register.html">Register here</a></p>
+
+      <p>
+        Don't have an account?
+        <a href="./register.html">Register here</a>
+      </p>
     </div>
   </body>
 </html>

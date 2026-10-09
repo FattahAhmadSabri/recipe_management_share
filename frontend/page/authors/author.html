@@ -5,9 +5,10 @@
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <title>Authors</title>
+    <title>Users</title>
 
     <link rel="stylesheet" href="../css/index.css" />
+    <link rel="stylesheet" href="../css/users.css" />
   </head>
 
   <body>
@@ -20,46 +21,18 @@
     <!-- Page Content -->
     <main class="page-container">
       <div class="content-layout">
+        <!-- Main Content -->
         <section class="main-content">
-          <h1>Authors</h1>
+          <h1 class="users-title">Users</h1>
 
-          <div class="authors-list">
-            <div class="author">
-              <div class="author-image">
-                <img src="../assets/default-user.png" alt="Author" />
-              </div>
+          <!-- Loading -->
+          <div id="loading" class="loading">Loading users...</div>
 
-              <div class="author-info">
-                <h2>A Cooking Day in Rome</h2>
+          <!-- Error -->
+          <div id="error" class="error-message"></div>
 
-                <p>Posted Recipes (1)</p>
-              </div>
-            </div>
-
-            <div class="author">
-              <div class="author-image">
-                <img src="../assets/default-user.png" alt="Author" />
-              </div>
-
-              <div class="author-info">
-                <h2>Aaron</h2>
-
-                <p>Posted Recipes (1)</p>
-              </div>
-            </div>
-
-            <div class="author">
-              <div class="author-image">
-                <img src="../assets/default-user.png" alt="Author" />
-              </div>
-
-              <div class="author-info">
-                <h2>Adam Brown</h2>
-
-                <p>Posted Recipes (1)</p>
-              </div>
-            </div>
-          </div>
+          <!-- Users -->
+          <div id="usersList" class="users-list"></div>
         </section>
 
         <!-- Sidebar -->
@@ -70,6 +43,68 @@
     <!-- Footer -->
     <div id="footer"></div>
 
+    <!-- Axios -->
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+    <!-- Layout -->
     <script src="../js/layout.js"></script>
+
+    <!-- Users -->
+    <script src="./author.js"></script>
+  </body>
+</html>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Users</title>
+
+    <link rel="stylesheet" href="../css/index.css" />
+    <link rel="stylesheet" href="../css/users.css" />
+  </head>
+
+  <body>
+    <!-- Header -->
+    <div id="header"></div>
+
+    <!-- Navbar -->
+    <div id="navbar"></div>
+
+    <!-- Page Content -->
+    <main class="page-container">
+      <div class="content-layout">
+        <!-- Main Content -->
+        <section class="main-content">
+          <h1 class="users-title">Users</h1>
+
+          <!-- Loading -->
+          <div id="loading" class="loading">Loading users...</div>
+
+          <!-- Error -->
+          <div id="error" class="error-message"></div>
+
+          <!-- Users -->
+          <div id="usersList" class="users-list"></div>
+        </section>
+
+        <!-- Sidebar -->
+        <div id="sidebar"></div>
+      </div>
+    </main>
+
+    <!-- Footer -->
+    <div id="footer"></div>
+
+    <!-- Axios -->
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+    <!-- Layout -->
+    <script src="../js/layout.js"></script>
+
+    <!-- Users -->
+    <script src="../js/users.js"></script>
   </body>
 </html>

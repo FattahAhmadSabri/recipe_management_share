@@ -2,17 +2,19 @@ const {
   addUserService,
   loginService,
   updateUserByIdService,
+  getAllUsersService,
 } = require("../service/userService");
 const jwt = require("jsonwebtoken");
 const {
   successResponse,
   errorResponse,
 } = require("../middleware/responseHandlingMiddleware");
+const { User } = require("../model");
 
 const addUserController = async (req, res) => {
   try {
     const { name, email, password } = req.body;
-
+   
     const response = await addUserService(name, email, password);
     return successResponse(res, 201, "User added successfully", response);
   } catch (error) {
@@ -57,4 +59,19 @@ const updateUserController = async (req, res) => {
   }
 };
 
-module.exports = { addUserController, loginController, updateUserController };
+const getAllUsersController = async (req, res) => {
+  try {
+    const response = await getAllUsersService();
+
+    return successResponse(res, 200, "Get users successfully", response);
+  } catch (error) {
+    return errorResponse(res, 500, error.message);
+  }
+};
+
+module.exports = {
+  addUserController,
+  loginController,
+  updateUserController,
+  getAllUsersController,
+};

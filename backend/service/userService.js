@@ -1,5 +1,5 @@
 const bcrypt = require("bcrypt");
-const { User } = require("../model/index");
+const { User, Recipe } = require("../model/index");
 
 const addUserService = async (name, email, password) => {
   const hashedPassword = await bcrypt.hash(password, 10);
@@ -42,4 +42,19 @@ const updateUserByIdService = (userId, name, password) => {
   return user;
 };
 
-module.exports = { addUserService, loginService, updateUserByIdService };
+const getAllUsersService = async () => {
+  const response = await User.findAll({
+    where: {
+      role: "user",
+    },
+    include: [
+      {
+        model: Recipe,
+      },
+    ],
+  });
+
+  return response;
+};
+
+module.exports = { addUserService, loginService, updateUserByIdService, getAllUsersService };

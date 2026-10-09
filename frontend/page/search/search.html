@@ -1,51 +1,150 @@
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
+<div class="search-page">
 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <h1>Search</h1>
 
-    <title>Search Recipes</title>
+  <div class="recipe-finder">
 
-    <link rel="stylesheet" href="../css/index.css" />
-  </head>
+    <h2>Recipe Finder</h2>
 
-  <body>
-    <!-- Header -->
-    <div id="header"></div>
+    <!-- Simple Search -->
+    <div class="search-row">
+      <label for="searchInput">Search for</label>
 
-    <!-- Navbar -->
-    <div id="navbar"></div>
+      <input
+        type="text"
+        id="searchInput"
+      />
 
-    <!-- Page Content -->
-    <main class="page-container">
-      <div class="content-layout">
-        <section class="main-content">
-          <h1>Search Recipes</h1>
+      <button id="searchButton">Go</button>
+    </div>
 
-          <div class="search-box">
-            <input
-              type="text"
-              id="searchInput"
-              placeholder="Search recipes..."
-            />
 
-            <button id="searchButton">Search</button>
-          </div>
+    <!-- Advanced Search -->
+    <div class="advanced-search">
 
-          <div id="searchResults">
-            <p>Search for a recipe to see results.</p>
-          </div>
-        </section>
+      <h3>Advanced Recipe search</h3>
 
-        <!-- Sidebar -->
-        <div id="sidebar"></div>
+      <button type="button" id="clearButton">
+        Clear All
+      </button>
+
+
+      <!-- Cuisine -->
+      <div class="form-row">
+
+        <label for="cuisine">
+          Cuisine :
+        </label>
+
+        <select id="cuisine">
+          <option value="">Please select</option>
+        </select>
+
       </div>
-    </main>
 
-    <!-- Footer -->
-    <div id="footer"></div>
 
-    <script src="../js/layout.js"></script>
-  </body>
-</html>
+      <!-- Main Ingredients -->
+      <div class="form-row">
+
+        <label for="mainIngredients">
+          Main Ingredients:
+        </label>
+
+        <select
+          id="mainIngredients"
+          multiple
+        >
+          <option disabled>
+            Select Main Ingredient
+          </option>
+
+          <option value="Beans/Pulses">
+            Beans/Pulses
+          </option>
+
+          <option value="Beef">
+            Beef
+          </option>
+
+          <option value="Cheese/Paneer/Tofu">
+            Cheese/Paneer/Tofu
+          </option>
+
+          <option value="Chicken">
+            Chicken
+          </option>
+
+          <option value="Dairy">
+            Dairy
+          </option>
+
+          <option value="Egg">
+            Egg
+          </option>
+        </select>
+
+      </div>
+
+
+      <!-- Recipe Types -->
+      <div class="form-row">
+
+        <label for="recipeTypes">
+          Recipe Types:
+        </label>
+
+        <select
+          id="recipeTypes"
+          multiple
+        >
+          <option disabled>
+            Select Recipe Type
+          </option>
+
+          <option value="Baking">
+            Baking
+          </option>
+
+          <option value="Beverages">
+            Beverages
+          </option>
+
+          <option value="Bread">
+            Bread
+          </option>
+
+          <option value="Breakfast">
+            Breakfast
+          </option>
+
+          <option value="Dessert">
+            Dessert
+          </option>
+
+          <option value="Dinner">
+            Dinner
+          </option>
+        </select>
+
+      </div>
+
+
+      <!-- Tags -->
+      <div class="form-row">
+
+        <label for="tags">
+          Tags:
+        </label>
+
+        <input
+          type="text"
+          id="tags"
+        />
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>

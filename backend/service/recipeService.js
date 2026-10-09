@@ -24,6 +24,7 @@ const addRecipeService = async (
   source,
   notes,
   file,
+  userId
 ) => {
   const transaction = await sequelize.transaction();
 
@@ -84,6 +85,7 @@ const addRecipeService = async (
         source,
         notes,
         image: imageKey,
+        userId
       },
       {
         transaction,
@@ -168,5 +170,13 @@ const updateRecipeService = async (
     throw error;
   }
 };
+
+
+const searchRecipeByRecipeNameService = (recipeName)=>{
+     const response = Recipe.findAll({where : {
+      recipeName : recipeName,
+
+     }})
+}
 
 module.exports = { addRecipeService, getRecipeService, updateRecipeService };

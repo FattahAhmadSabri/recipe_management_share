@@ -1,0 +1,176 @@
+/* Users Page */
+
+.users-title {
+  display: none;
+}
+
+
+/* Users List */
+
+.users-list {
+  width: 100%;
+}
+
+
+/* Individual User */
+
+.user {
+  display: flex;
+  align-items: flex-start;
+
+  width: 100%;
+
+  margin-bottom: 32px;
+}
+
+
+/* User Image */
+
+.user-image {
+  width: 192px;
+  height: 192px;
+
+  flex-shrink: 0;
+
+  overflow: hidden;
+
+  background-color: #c6c6c6;
+}
+
+
+.user-image img {
+  width: 100%;
+  height: 100%;
+
+  object-fit: cover;
+
+  display: block;
+}
+
+
+/* User Information */
+
+.user-info {
+  margin-left: 31px;
+
+  padding-top: 1px;
+}
+
+
+.user-name {
+  margin: 0;
+
+  width: 300px;
+
+  font-family: Georgia, "Times New Roman", serif;
+
+  font-size: 18px;
+
+  font-weight: normal;
+
+  line-height: 21px;
+
+  color: #990000;
+
+  cursor: pointer;
+}
+
+
+.user-name:hover {
+  text-decoration: underline;
+}
+
+
+.user-recipes {
+  margin-top: 5px;
+
+  font-family: Georgia, "Times New Roman", serif;
+
+  font-size: 15px;
+
+  color: #555555;
+}
+
+
+/* Loading */
+
+.loading {
+  font-family: Georgia, "Times New Roman", serif;
+
+  font-size: 16px;
+
+  color: #555555;
+
+  padding: 20px 0;
+}
+
+
+/* Error */
+
+.error-message {
+  display: none;
+
+  font-family: Georgia, "Times New Roman", serif;
+
+  font-size: 16px;
+
+  color: #990000;
+
+  padding: 20px 0;
+}
+
+
+/* No Users */
+
+.no-users {
+  font-family: Georgia, "Times New Roman", serif;
+
+  font-size: 16px;
+
+  color: #555555;
+
+  padding: 20px 0;
+}
+
+
+/* Responsive */
+
+@media (max-width: 768px) {
+
+  .user {
+    margin-bottom: 25px;
+  }
+
+  .user-image {
+    width: 120px;
+    height: 120px;
+  }
+
+  .user-info {
+    margin-left: 20px;
+  }
+
+  .user-name {
+    width: auto;
+    font-size: 17px;
+  }
+
+}
+
+
+@media (max-width: 500px) {
+
+  .user-image {
+    width: 90px;
+    height: 90px;
+  }
+
+  .user-info {
+    margin-left: 15px;
+  }
+
+  .user-name {
+    font-size: 16px;
+  }
+
+}
