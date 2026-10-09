@@ -8,6 +8,7 @@ const {
   addRecipeService,
   getRecipeService,
   updateRecipeService,
+  deleteRecipeService,
 } = require("../service/recipeService");
 const sequelize = require("../utils/dbConfig");
 
@@ -57,10 +58,10 @@ const addRecipeController = async (req, res) => {
       file,
       userId,
     );
-    console.log("-------------------------",response);
+    console.log("-------------------------", response);
     return successResponse(res, 201, "Recipe added successfully", response);
   } catch (error) {
-    console.log("-------------------------",error.message);
+    console.log("-------------------------", error.message);
     return errorResponse(res, 500, error.message);
   }
 };
@@ -76,55 +77,29 @@ const getRecipeController = async (req, res) => {
 
 const updateRecipeController = async (req, res) => {
   try {
-    const {
-      recipeName,
-      description,
-      ingredients,
-      method,
-      cuisine,
-      mainIngredient,
-      recipeType,
-      cookingTime,
-      preparationTime,
-      marinationTime,
-      soakingTime,
-      serves,
-      makes,
-      otherNames,
-      tags,
-      keywords,
-      source,
-      notes,
-    } = req.body;
+    const updates = req.body;
     const userId = req.user.id;
     const file = req.file;
     const { id } = req.params;
     const response = await updateRecipeService(
-      recipeName,
-      description,
-      ingredients,
-      method,
-      cuisine,
-      mainIngredient,
-      recipeType,
-      cookingTime,
-      preparationTime,
-      marinationTime,
-      soakingTime,
-      serves,
-      makes,
-      otherNames,
-      tags,
-      keywords,
-      source,
-      notes,
       userId,
+      updates,
       file,
       id,
+      req.user.role === "admin",
     );
     return successResponse(res, 200, "Recipe updated successfully", response);
   } catch (error) {
-    return errorResponse(res, 500, error.message);
+    return errorResponse(res, error.statusCode || 500, error.message);
+  }
+};
+
+const deleteRecipeController = async (req, res) => {
+  try {
+    const response = await deleteRecipeService(req.params.id);
+    return successResponse(res, 200, "Recipe deleted successfully", response);
+  } catch (error) {
+    return errorResponse(res, error.statusCode || 500, error.message);
   }
 };
 
@@ -166,4 +141,5 @@ module.exports = {
   getRecipeController,
   updateRecipeController,
   getRecipeByIdController,
+  deleteRecipeController,
 };

@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Manage Recipes | Recipe Admin</title>
+    <link rel="stylesheet" href="adminHome.css" />
+  </head>
+  <body>
+    <div class="dashboard">
+      <aside class="sidebar">
+        <h2>Recipe Admin</h2>
+        <nav>
+          <a href="./adminHome.html">Dashboard</a>
+          <a href="./adminRecipes.html" class="active">Manage Recipes</a>
+          <a href="./adminComments.html">Comments &amp; Reviews</a>
+          <a href="./adminIngredients.html">Main Ingredients</a>
+          <a href="../adminUser/adminUser.html">Manage Users</a>
+          <a href="../../index.html">View Website</a>
+          <a href="../../page/login_register/login.html" id="logoutLink"
+            >Logout</a
+          >
+        </nav>
+      </aside>
+
+      <main class="main-content">
+        <header class="topbar">
+          <div>
+            <h1>Manage Recipes</h1>
+            <p>Recipes shared on the platform.</p>
+          </div>
+          <div class="admin-profile">Admin</div>
+        </header>
+
+        <section class="content-card">
+          <p id="recipeMessage" class="admin-message" role="status"></p>
+          <div class="table-wrapper">
+            <table>
+              <thead>
+                <tr>
+                  <th>Recipe Name</th>
+                  <th>Main Ingredient</th>
+                  <th>Recipe Type</th>
+                  <th>Description</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="recipeTable">
+                <tr>
+                  <td colspan="5">Loading recipes...</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <dialog id="editRecipeDialog" aria-labelledby="editRecipeTitle">
+          <form id="editRecipeForm">
+            <h2 id="editRecipeTitle">Edit recipe</h2>
+
+            <label for="editRecipeName">Recipe name</label>
+            <input id="editRecipeName" name="recipeName" type="text" required />
+
+            <label for="editDescription">Description</label>
+            <textarea
+              id="editDescription"
+              name="description"
+              rows="3"
+            ></textarea>
+
+            <label for="editIngredients">Ingredients</label>
+            <textarea
+              id="editIngredients"
+              name="ingredients"
+              rows="3"
+              required
+            ></textarea>
+
+            <label for="editMethod">Method</label>
+            <textarea
+              id="editMethod"
+              name="method"
+              rows="3"
+              required
+            ></textarea>
+
+            <label for="editCuisine">Cuisine</label>
+            <input id="editCuisine" name="cuisine" type="text" />
+
+            <label for="editCookingTime">Cooking time</label>
+            <input id="editCookingTime" name="cookingTime" type="text" />
+
+            <p id="editRecipeMessage" class="admin-message" role="alert"></p>
+
+            <div class="recipe-dialog-actions">
+              <button type="button" id="cancelRecipeEdit">Cancel</button>
+              <button type="submit">Save changes</button>
+            </div>
+          </form>
+        </dialog>
+      </main>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="adminRecipes.js"></script>
+  </body>
+</html>

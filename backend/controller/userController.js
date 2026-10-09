@@ -3,6 +3,8 @@ const {
   loginService,
   updateUserByIdService,
   getAllUsersService,
+  updateUserForAdminService,
+  deleteUserByIdService,
 } = require("../service/userService");
 const jwt = require("jsonwebtoken");
 const {
@@ -13,9 +15,9 @@ const { User } = require("../model");
 
 const addUserController = async (req, res) => {
   try {
-    const { name, email, password } = req.body;
-   
-    const response = await addUserService(name, email, password);
+    const { name, email, password, role } = req.body;
+
+    const response = await addUserService(name, email, password,role);
     return successResponse(res, 201, "User added successfully", response);
   } catch (error) {
     return errorResponse(res, 500, error.message);
@@ -69,9 +71,29 @@ const getAllUsersController = async (req, res) => {
   }
 };
 
+const updateUserForAdminController = async (req, res) => {
+  try {
+    const response = await updateUserForAdminService(req.params.id, req.body);
+    return successResponse(res, 200, "User updated successfully", response);
+  } catch (error) {
+    return errorResponse(res, error.statusCode || 500, error.message);
+  }
+};
+
+const deleteUserController = async (req, res) => {
+  try {
+    const response = await deleteUserByIdService(req.params.id);
+    return successResponse(res, 200, "User deleted successfully", response);
+  } catch (error) {
+    return errorResponse(res, error.statusCode || 500, error.message);
+  }
+};
+
 module.exports = {
   addUserController,
   loginController,
   updateUserController,
   getAllUsersController,
+  updateUserForAdminController,
+  deleteUserController,
 };

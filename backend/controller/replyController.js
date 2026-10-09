@@ -60,10 +60,10 @@ const deleteReplyByRecipeId = async (req, res) => {
   try {
     const id = req.params.id;
     const userId = req.user.id;
-    await deleteReplyService(userId, id);
+    await deleteReplyService(userId, id, req.user.role === "admin");
     return successResponse(res, 200, "Reply deleted successfully");
   } catch (error) {
-    return errorResponse(res, 500, error.message);
+    return errorResponse(res, error.statusCode || 500, error.message);
   }
 };
 

@@ -103,80 +103,84 @@ const addRecipeService = async (
 };
 
 const getRecipeService = async () => {
-  const response = await Recipe.findAll();
+  const response = await Recipe.findAll({
+    include: [
+      { model: MainIngredient, attributes: ["name"] },
+      { model: RecipeType, attributes: ["name"] },
+    ],
+  });
 
   return response.map((recipe) => {
     const data = recipe.toJSON();
 
     return {
       ...data,
+      mainIngredientName: data.mainIngredient?.name || "",
+      recipeTypeName: data.recipeType?.name || "",
       image: `https://${process.env.AWS_BUCKET_NAME}.s3.ap-south-1.amazonaws.com/${data.image}`,
     };
   });
 };
 
-const updateRecipeService = async (
-  userId,
-  recipeName,
-  description,
-  ingredients,
-  method,
-  cuisine,
-  mainIngredient,
-  recipeType,
-  cookingTime,
-  preparationTime,
-  marinationTime,
-  soakingTime,
-  serves,
-  makes,
-  otherNames,
-  tags,
-  keywords,
-  source,
-  notes,
-  file,
-  id,
-) => {
-  try {
-    const updateData = {
-      recipeName,
-      description,
-      ingredients,
-      method,
-      cuisine,
-      mainIngredient,
-      recipeType,
-      cookingTime,
-      preparationTime,
-      marinationTime,
-      soakingTime,
-      serves,
-      makes,
-      otherNames,
-      tags,
-      keywords,
-      source,
-      notes,
-    };
+const updateRecipeService = async (userId, updates, file, id, isAdmin) => {
+  const recipe = await Recipe.findByPk(id);
 
-    if (file) {
-      const imageKey = await uploadImage(file);
-
-      updateData.image = imageKey;
-    }
-
-    const response = await Recipe.update(updateData, {
-      where: {
-        id,
-        userId,
-      },
-    });
-
-    return response;
-  } catch (error) {
+  if (!recipe) {
+    const error = new Error("Recipe not found");
+    error.statusCode = 404;
     throw error;
   }
+
+  if (!isAdmin && recipe.userId !== userId) {
+    const error = new Error("You can only update your own recipes");
+    error.statusCode = 403;
+    throw error;
+  }
+
+  const updateData = {};
+  const editableFields = [
+    "recipeName",
+    "description",
+    "ingredients",
+    "method",
+    "cuisine",
+    "cookingTime",
+    "preparationTime",
+    "marinationTime",
+    "soakingTime",
+    "serves",
+    "makes",
+    "otherNames",
+    "tags",
+    "keywords",
+    "source",
+    "notes",
+  ];
+
+  for (const field of editableFields) {
+    if (updates[field] !== undefined) {
+      updateData[field] = updates[field];
+    }
+  }
+
+  if (file) {
+    updateData.image = await uploadImage(file);
+  }
+
+  await recipe.update(updateData);
+  return recipe;
+};
+
+const deleteRecipeService = async (id) => {
+  const deletedCount = await Recipe.destroy({ where: { id } });
+
+  if (deletedCount === 0) {
+    const error = new Error("Recipe not found");
+    error.statusCode = 404;
+    throw error;
+  }
+
+  return { id };
 };
 
 const searchRecipeByRecipeNameService = (recipeName) => {
@@ -187,4 +191,10 @@ const searchRecipeByRecipeNameService = (recipeName) => {
   });
 };
 
-module.exports = { addRecipeService, getRecipeService, updateRecipeService };
+module.exports = {
+  addRecipeService,
+  getRecipeService,
+  updateRecipeService,
+  deleteRecipeService,
+  searchRecipeByRecipeNameService,
+};

@@ -4,6 +4,7 @@ const {
   getRecipeController,
   updateRecipeController,
   getRecipeByIdController,
+  deleteRecipeController,
 } = require("../controller/recipeController");
 const authMiddleware = require("../middleware/authMiddleware");
 const authorizeRoles = require("../middleware/roleMiddleware");
@@ -28,6 +29,13 @@ router.put(
   authorizeRoles("user"),
   upload.single("image"),
   updateRecipeController,
+);
+
+router.delete(
+  "/recipe/:id",
+  authMiddleware,
+  authorizeRoles("admin"),
+  deleteRecipeController,
 );
 
 module.exports = router;

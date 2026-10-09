@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Main Ingredients | Recipe Admin</title>
+    <link rel="stylesheet" href="adminHome.css" />
+  </head>
+  <body>
+    <div class="dashboard">
+      <aside class="sidebar">
+        <h2>Recipe Admin</h2>
+        <nav>
+          <a href="./adminHome.html">Dashboard</a>
+          <a href="./adminRecipes.html">Manage Recipes</a>
+          <a href="./adminComments.html">Comments &amp; Reviews</a>
+          <a href="./adminIngredients.html" class="active">Main Ingredients</a>
+          <a href="../adminUser/adminUser.html">Manage Users</a>
+          <a href="../../index.html">View Website</a>
+          <a href="../../page/login_register/login.html" id="logoutLink"
+            >Logout</a
+          >
+        </nav>
+      </aside>
+
+      <main class="main-content">
+        <header class="topbar">
+          <div>
+            <h1>Main Ingredients</h1>
+            <p>Manage the ingredient options used by recipes.</p>
+          </div>
+          <div class="admin-profile">Admin</div>
+        </header>
+
+        <section class="content-card">
+          <form id="ingredientForm" class="admin-form">
+            <label for="ingredientName">
+              Ingredient name
+              <input
+                id="ingredientName"
+                name="name"
+                type="text"
+                required
+                maxlength="100"
+              />
+            </label>
+            <button class="action-btn" type="submit">Add ingredient</button>
+          </form>
+          <p id="ingredientMessage" class="admin-message" role="status"></p>
+        </section>
+
+        <section class="content-card">
+          <h2>Available Ingredients</h2>
+          <div class="table-wrapper">
+            <table>
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>ID</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="ingredientsTable">
+                <tr>
+                  <td colspan="3">Loading ingredients...</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <dialog id="editIngredientDialog" aria-labelledby="editIngredientTitle">
+          <form id="editIngredientForm">
+            <h2 id="editIngredientTitle">Edit main ingredient</h2>
+            <label for="editIngredientName">
+              Ingredient name
+              <input
+                id="editIngredientName"
+                name="name"
+                type="text"
+                required
+                maxlength="100"
+              />
+            </label>
+            <p
+              id="editIngredientMessage"
+              class="admin-message"
+              role="alert"
+            ></p>
+            <div class="recipe-dialog-actions">
+              <button type="button" id="cancelIngredientEdit">Cancel</button>
+              <button type="submit">Save changes</button>
+            </div>
+          </form>
+        </dialog>
+      </main>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="adminIngredients.js"></script>
+  </body>
+</html>

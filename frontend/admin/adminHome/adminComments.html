@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Comments &amp; Reviews | Recipe Admin</title>
+    <link rel="stylesheet" href="adminHome.css" />
+  </head>
+  <body>
+    <div class="dashboard">
+      <aside class="sidebar">
+        <h2>Recipe Admin</h2>
+        <nav>
+          <a href="./adminHome.html">Dashboard</a>
+          <a href="./adminRecipes.html">Manage Recipes</a>
+          <a href="./adminComments.html" class="active"
+            >Comments &amp; Reviews</a
+          >
+          <a href="./adminIngredients.html">Main Ingredients</a>
+          <a href="../adminUser/adminUser.html">Manage Users</a>
+          <a href="../../index.html">View Website</a>
+          <a href="../../page/login_register/login.html" id="logoutLink"
+            >Logout</a
+          >
+        </nav>
+      </aside>
+
+      <main class="main-content">
+        <header class="topbar">
+          <div>
+            <h1>Comments &amp; Reviews</h1>
+            <p>Review comments shared on recipes.</p>
+          </div>
+          <div class="admin-profile">Admin</div>
+        </header>
+
+        <section class="content-card">
+          <p id="commentMessage" class="admin-message" role="status"></p>
+          <div class="table-wrapper">
+            <table>
+              <thead>
+                <tr>
+                  <th>Recipe</th>
+                  <th>Author</th>
+                  <th>Comment</th>
+                  <th>Posted</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody id="commentsTable">
+                <tr>
+                  <td colspan="5">Loading comments...</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="adminComments.js"></script>
+  </body>
+</html>

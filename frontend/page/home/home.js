@@ -12,41 +12,35 @@ axios
     recipeList.innerHTML = "";
 
     recipes.forEach((recipe) => {
+      const recipeId = encodeURIComponent(recipe.id);
+      const imageUrl = encodeURIComponent(recipe.image || "");
+
       recipeList.innerHTML += `
-
-        <article class="recipe-card">
-
+        <a
+          class="recipe-card"
+          href="./page/home/recipeDetails.html?id=${recipeId}&image=${imageUrl}"
+        >
           <img
-src="${recipe.image}"
-alt="${recipe.recipeName}"
-class="recipe-image"
-/>
+            src="${escapeHtml(recipe.image)}"
+            alt="${escapeHtml(recipe.recipeName)}"
+            class="recipe-image"
+          />
 
           <h2 class="recipe-title">
-            ${recipe.recipeName}
+            ${escapeHtml(recipe.recipeName)}
           </h2>
 
           <p class="recipe-description">
-            ${recipe.description || recipe.method}
+            ${escapeHtml(recipe.description || recipe.method || "")}
           </p>
-
-          <a href="#" class="read-more">
-            Read more
-          </a>
 
           <p class="posted-by">
-            Main Ingredient:
-            <a href="#">
-              ${recipe.mainIngredient}
-            </a>
+            Main Ingredient: ${escapeHtml(recipe.mainIngredient)}
           </p>
-
-        </article>
-
+        </a>
       `;
     });
   })
-
   .catch((error) => {
     console.log("API error:", error);
 
@@ -54,3 +48,17 @@ class="recipe-image"
       <p>Unable to load recipes.</p>
     `;
   });
+
+function escapeHtml(value) {
+  return String(value ?? "").replace(/[&<>"']/g, (character) => {
+    const entities = {
+      "&": "&amp;",
+      "<": "&lt;",
+      ">": "&gt;",
+      '"': "&quot;",
+      "'": "&#39;",
+    };
+
+    return entities[character];
+  });
+}
