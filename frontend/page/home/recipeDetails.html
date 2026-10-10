@@ -12,6 +12,34 @@
     <main class="recipe-details-page">
       <a class="recipe-details-back" href="../../index.html">Back to recipes</a>
       <article id="recipe-detail" aria-live="polite">Loading recipe...</article>
+
+      <section class="recipe-comments" aria-live="polite">
+        <h2>Comments</h2>
+
+        <form id="comment-form" class="comment-form">
+          <textarea
+            id="comment-input"
+            rows="4"
+            placeholder="Write a comment for this recipe..."
+            aria-label="Write a comment for this recipe"
+            required
+          ></textarea>
+          <div class="comment-form-actions">
+            <button type="submit" class="comment-submit-btn">
+              Post Comment
+            </button>
+          </div>
+        </form>
+
+        <div
+          id="comment-status"
+          class="comment-status"
+          aria-live="polite"
+        ></div>
+        <div id="recipe-comments-list" class="recipe-comments-list">
+          Loading comments...
+        </div>
+      </section>
     </main>
 
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>

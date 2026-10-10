@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Following Authors</title>
+    <link rel="stylesheet" href="../../css/index.css" />
+    <link rel="stylesheet" href="./author.css" />
+  </head>
+  <body>
+    <div id="header"></div>
+    <div id="navbar"></div>
+
+    <main class="page-container">
+      <div class="content-layout">
+        <section class="main-content">
+          <div class="authors-header">
+            <h1>Following Authors</h1>
+            <p>See the authors you follow and the recipes they have shared.</p>
+          </div>
+
+          <div class="author-header-actions">
+            <a class="secondary-btn" href="./author.html"
+              >Back to all authors</a
+            >
+          </div>
+
+          <div id="loading" class="loading">Loading followed authors...</div>
+          <div id="error" class="error-message"></div>
+          <div id="followingAuthorsList" class="authors-list"></div>
+        </section>
+
+        <div id="sidebar"></div>
+      </div>
+    </main>
+
+    <div id="footer"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="../../js/layout.js"></script>
+    <script src="./followinglist.js"></script>
+  </body>
+</html>

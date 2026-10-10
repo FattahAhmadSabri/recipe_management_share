@@ -4,9 +4,11 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Authors</title>
+
     <link rel="stylesheet" href="../../css/index.css" />
     <link rel="stylesheet" href="./author.css" />
   </head>
+
   <body>
     <div id="header"></div>
     <div id="navbar"></div>
@@ -30,19 +32,34 @@
             />
           </div>
 
+          <div class="author-header-actions">
+            <a class="secondary-btn" href="./page/authors/followinglist.html">
+              View Following Authors
+            </a>
+          </div>
+
           <div id="loading" class="loading">Loading authors...</div>
           <div id="error" class="error-message"></div>
 
-          <div class="authors-sections">
-            <div class="authors-panel">
-              <h2>All Authors</h2>
-              <div id="allAuthorsList" class="authors-list"></div>
-            </div>
+          <!-- All Authors: GET /user -->
+          <div
+            class="authors-panel"
+            id="allAuthorsSection"
+            role="tabpanel"
+            aria-labelledby="allAuthorsTab"
+          >
+            <div id="allAuthorsList" class="authors-list"></div>
+          </div>
 
-            <div class="authors-panel">
-              <h2>Authors You Follow</h2>
-              <div id="followedAuthorsList" class="authors-list"></div>
-            </div>
+          <!-- Following Authors: GET /following/me -->
+          <div
+            class="authors-panel"
+            id="followingAuthorsSection"
+            role="tabpanel"
+            aria-labelledby="followingAuthorsTab"
+            hidden
+          >
+            <div id="followedAuthorsList" class="authors-list"></div>
           </div>
         </section>
 
@@ -55,5 +72,32 @@
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="../../js/layout.js"></script>
     <script src="./author.js"></script>
+
+    <!-- Tab Switching -->
+    <script>
+      const authorTabs = document.querySelectorAll(".author-tab");
+
+      const allAuthorsSection = document.getElementById("allAuthorsSection");
+
+      const followingAuthorsSection = document.getElementById(
+        "followingAuthorsSection",
+      );
+
+      authorTabs.forEach((tab) => {
+        tab.addEventListener("click", () => {
+          const showAll = tab.dataset.tab === "all";
+
+          authorTabs.forEach((item) => {
+            const isActive = item === tab;
+
+            item.classList.toggle("active", isActive);
+            item.setAttribute("aria-selected", String(isActive));
+          });
+
+          allAuthorsSection.hidden = !showAll;
+          followingAuthorsSection.hidden = showAll;
+        });
+      });
+    </script>
   </body>
 </html>

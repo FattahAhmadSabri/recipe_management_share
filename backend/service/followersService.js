@@ -1,4 +1,4 @@
-const { Follow, User } = require("../model");
+const { Follow, User, Recipe } = require("../model");
 
 const createFollowService = async (followerId, followingId) => {
   if (!followerId || !followingId) {
@@ -90,6 +90,13 @@ const getFollowingByUserIdService = async (userId) => {
         model: User,
         as: "followingUser",
         attributes: { exclude: ["password"] },
+        include: [
+          {
+            model: Recipe,
+            as: "recipes",
+            attributes: ["id", "recipeName", "image", "description"],
+          },
+        ],
       },
     ],
     order: [["createdAt", "DESC"]],

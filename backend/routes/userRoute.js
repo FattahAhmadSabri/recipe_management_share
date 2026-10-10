@@ -17,7 +17,7 @@ router.put("/user/update", authMiddleware, updateUserController);
 router.get(
   "/user",
   authMiddleware,
-  authorizeRoles("admin"),
+
   getAllUsersController,
 );
 router.put(

@@ -22,6 +22,12 @@ const getAllReplyByRecipe = async (recipeId) => {
     where: {
       recipeId: recipeId,
     },
+    include: [
+      {
+        model: User,
+        attributes: ["id", "name", "email"],
+      },
+    ],
     order: [["createdAt", "DESC"]],
   });
 

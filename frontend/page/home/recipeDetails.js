@@ -1,10 +1,28 @@
 const recipeApi = "http://localhost:4500/recipe";
 const favoritesApi = "http://localhost:4500/favorite";
+const replyApi = "http://localhost:4500/reply";
 const params = new URLSearchParams(window.location.search);
 const recipeId = params.get("id");
 const imageUrl = params.get("image");
 const detail = document.getElementById("recipe-detail");
+const commentForm = document.getElementById("comment-form");
+const commentInput = document.getElementById("comment-input");
+const commentStatus = document.getElementById("comment-status");
+const commentsList = document.getElementById("recipe-comments-list");
 let isFavorite = false;
+
+function escapeHtml(value) {
+  return String(value ?? "").replace(/[&<>\"']/g, (character) => {
+    const htmlMap = {
+      "&": "&amp;",
+      "<": "&lt;",
+      ">": "&gt;",
+      '"': "&quot;",
+      "'": "&#39;",
+    };
+    return htmlMap[character];
+  });
+}
 
 function getAuthHeader() {
   const token = localStorage.getItem("token");
@@ -109,6 +127,97 @@ async function toggleFavorite() {
   }
 }
 
+async function renderComments() {
+  if (!recipeId) {
+    commentsList.innerHTML =
+      '<p class="no-comments">Recipe details unavailable.</p>';
+    return;
+  }
+
+  try {
+    const response = await axios.get(
+      `${replyApi}/${encodeURIComponent(recipeId)}`,
+    );
+    const comments = response?.data?.data || [];
+
+    if (!comments.length) {
+      commentsList.innerHTML =
+        '<p class="no-comments">No comments yet. Be the first to share your thoughts.</p>';
+      return;
+    }
+
+    commentsList.innerHTML = comments
+      .map(
+        (comment) => {
+          const userName =
+            comment?.user?.name || comment?.user?.email || "Unknown user";
+
+          return `
+            <article class="recipe-comment-item">
+              <div class="recipe-comment-header">
+                <strong>${escapeHtml(userName)}</strong>
+                <span>${new Date(comment.createdAt).toLocaleString()}</span>
+              </div>
+              <p>${escapeHtml(comment.reply || "")}</p>
+            </article>
+          `;
+        },
+      )
+      .join("");
+  } catch (error) {
+    commentsList.innerHTML =
+      '<p class="no-comments">Unable to load comments right now.</p>';
+    console.error("Unable to fetch recipe comments:", error);
+  }
+}
+
+async function submitComment(event) {
+  event.preventDefault();
+
+  if (!recipeId) {
+    commentStatus.textContent = "Recipe ID is missing.";
+    return;
+  }
+
+  const auth = getAuthHeader();
+  if (!auth) {
+    commentStatus.textContent = "Please log in to comment.";
+    window.location.href = "../login_register/login.html";
+    return;
+  }
+
+  const commentValue = commentInput.value.trim();
+  if (!commentValue) {
+    commentStatus.textContent = "Please enter a comment before posting.";
+    return;
+  }
+
+  const submitButton = commentForm.querySelector("button[type='submit']");
+  submitButton.disabled = true;
+  commentStatus.textContent = "Posting comment...";
+
+  try {
+    await axios.post(
+      `${replyApi}/${encodeURIComponent(recipeId)}`,
+      { reply: commentValue },
+      auth,
+    );
+
+    commentInput.value = "";
+    commentStatus.textContent = "Comment posted successfully.";
+    await renderComments();
+  } catch (error) {
+    commentStatus.textContent =
+      error.response?.data?.message || "Unable to post comment.";
+  } finally {
+    submitButton.disabled = false;
+  }
+}
+
+if (commentForm) {
+  commentForm.addEventListener("submit", submitComment);
+}
+
 if (!recipeId) {
   detail.textContent = "Recipe ID is missing.";
 } else {
@@ -162,6 +271,7 @@ if (!recipeId) {
       addDetailSection("Notes", recipe.notes);
 
       loadFavoriteStatus();
+      renderComments();
     })
     .catch((error) => {
       detail.textContent =
