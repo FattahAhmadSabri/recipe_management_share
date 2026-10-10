@@ -26,12 +26,19 @@ async function handleLogin(event) {
     console.log("Login response:", response.data);
 
     const token = response.data.token;
+    const user = response.data.data;
 
     if (!token) {
       throw new Error("Token not found");
     }
 
     localStorage.setItem("token", token);
+
+    if (user?.name) {
+      localStorage.setItem("userName", user.name);
+    } else if (user?.email) {
+      localStorage.setItem("userName", user.email.split("@")[0]);
+    }
 
     window.location.href = "../../index.html";
   } catch (error) {

@@ -21,9 +21,29 @@
             </p>
           </div>
 
+          <div class="author-search-wrap">
+            <input
+              id="authorSearch"
+              type="search"
+              placeholder="Search author by name"
+              aria-label="Search author by name"
+            />
+          </div>
+
           <div id="loading" class="loading">Loading authors...</div>
           <div id="error" class="error-message"></div>
-          <div id="authorsList" class="authors-list"></div>
+
+          <div class="authors-sections">
+            <div class="authors-panel">
+              <h2>All Authors</h2>
+              <div id="allAuthorsList" class="authors-list"></div>
+            </div>
+
+            <div class="authors-panel">
+              <h2>Authors You Follow</h2>
+              <div id="followedAuthorsList" class="authors-list"></div>
+            </div>
+          </div>
         </section>
 
         <div id="sidebar"></div>

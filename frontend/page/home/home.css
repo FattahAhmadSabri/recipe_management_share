@@ -119,6 +119,35 @@
   font-weight: normal;
 }
 
+.favorite-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin: 12px 0 20px;
+  padding: 12px 18px;
+  border: none;
+  border-radius: 999px;
+  background: #8b0000;
+  color: #fff;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.2s ease, opacity 0.2s ease, background 0.2s ease;
+}
+
+.favorite-btn:hover:not(:disabled) {
+  transform: translateY(-1px);
+  background: #a00000;
+}
+
+.favorite-btn.is-favorite {
+  background: #d97706;
+}
+
+.favorite-btn:disabled {
+  opacity: 0.75;
+  cursor: wait;
+}
+
 .recipe-detail-section {
   margin: 24px 0;
 }

@@ -35,7 +35,7 @@ axios
           </p>
 
           <p class="posted-by">
-            Main Ingredient: ${escapeHtml(recipe.mainIngredient)}
+            Main Ingredient: ${escapeHtml(recipe.mainIngredientName)}
           </p>
         </a>
       `;

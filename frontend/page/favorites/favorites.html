@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Favorite Collection</title>
+    <link rel="stylesheet" href="../../css/index.css" />
+    <link rel="stylesheet" href="./favorites.css" />
+  </head>
+  <body>
+    <div class="favorite-page">
+      <div class="favorite-header-row">
+        <a class="back-link" href="../../index.html">Back to home</a>
+      </div>
+
+      <h1 class="favorite-page-title">Favorite Collection</h1>
+
+      <div id="favorite-status" class="favorite-status">
+        Loading favorite recipes...
+      </div>
+      <div id="favorite-list" class="favorite-grid"></div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="./favorites.js"></script>
+  </body>
+</html>

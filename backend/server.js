@@ -14,6 +14,7 @@ const recipeTypeRoute = require("./routes/recipeTypeRoute");
 const replyRoute = require("./routes/replyRoute");
 const recentViewRoute = require("./routes/recentViewRoute");
 const followersRoute = require("./routes/followersRoute");
+const favoritesCollectionsRoute = require("./routes/favoritesCollectionsRoute");
 
 app.get("/", (req, res) => {
   res.send("server is working");
@@ -26,6 +27,7 @@ app.use("/", recipeTypeRoute);
 app.use("/", replyRoute);
 app.use("/", recentViewRoute);
 app.use("/", followersRoute);
+app.use("/", favoritesCollectionsRoute);
 sequelize
   .sync()
   .then(() => {

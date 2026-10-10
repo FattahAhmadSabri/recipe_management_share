@@ -1,31 +1,122 @@
 <header class="header">
-
-    <div class="logo-section">
-
-        <div class="logo">
-            🍽️
-        </div>
-
-        <div>
-            <h1>Share Recipes</h1>
-            <p>Discover • Cook • Share</p>
-        </div>
-
+  <div class="logo-section">
+    <div class="logo">🍽️</div>
+    <div>
+      <h1>Share Recipes</h1>
+      <p>Discover • Cook • Share</p>
     </div>
+  </div>
 
+  <div class="user-section">
+    <p>Welcome, <strong id="headerUserName">Guest</strong></p>
 
-    <div class="user-section">
-
-        <p>
-            Welcome, <strong>Fattah</strong>
-        </p>
-
-        <div class="user-links">
-            <a href="#">My Account</a>
-            <span>|</span>
-            <a href="#">Logout</a>
-        </div>
-
+    <div class="user-links">
+      <a href="#" id="favoriteCollectionLink">Favorite Collection</a>
+      <span>|</span>
+      <a href="#" id="myAccountLink">My Account</a>
+      <span>|</span>
+      <a href="#" id="logoutLink">Logout</a>
     </div>
+  </div>
 
+  <script>
+    (function () {
+      const headerUserName = document.getElementById("headerUserName");
+      const logoutLink = document.getElementById("logoutLink");
+      const favoriteLink = document.getElementById("favoriteCollectionLink");
+      const myAccountLink = document.getElementById("myAccountLink");
+      const token = localStorage.getItem("token");
+      const savedUserName = localStorage.getItem("userName");
+
+      function decodeToken() {
+        if (!token) return null;
+
+        try {
+          const base64Payload = token.split(".")[1];
+          if (!base64Payload) return null;
+
+          return JSON.parse(atob(base64Payload));
+        } catch (error) {
+          return null;
+        }
+      }
+
+      async function loadUserName() {
+        const payload = decodeToken();
+        const userId = payload?.id || payload?.userId;
+
+        if (savedUserName) {
+          headerUserName.textContent = savedUserName;
+          return;
+        }
+
+        if (!token) {
+          headerUserName.textContent = "Guest";
+          return;
+        }
+
+        if (userId) {
+          try {
+            const response = await fetch("http://localhost:4500/user", {
+              method: "GET",
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            });
+
+            const result = await response.json();
+            const users = Array.isArray(result)
+              ? result
+              : Array.isArray(result.data)
+                ? result.data
+                : [];
+
+            const currentUser = users.find(
+              (user) => String(user.id) === String(userId),
+            );
+
+            if (currentUser?.name) {
+              localStorage.setItem("userName", currentUser.name);
+              headerUserName.textContent = currentUser.name;
+              return;
+            }
+          } catch (error) {
+            console.warn("Could not load user from API:", error);
+          }
+        }
+
+        headerUserName.textContent = payload?.name || "User";
+      }
+
+      loadUserName();
+
+      if (!token) {
+        if (logoutLink) logoutLink.style.display = "none";
+        if (favoriteLink) favoriteLink.style.display = "none";
+        if (myAccountLink) myAccountLink.style.display = "none";
+      }
+
+      if (logoutLink) {
+        logoutLink.addEventListener("click", function (event) {
+          event.preventDefault();
+          localStorage.removeItem("token");
+          localStorage.removeItem("userName");
+          window.location.href = "../../page/login_register/login.html";
+        });
+      }
+
+      if (favoriteLink) {
+        favoriteLink.addEventListener("click", function (event) {
+          event.preventDefault();
+
+          if (!token) {
+            window.location.href = "../../page/login_register/login.html";
+            return;
+          }
+
+          window.location.href = "../../page/favorites/favorites.html";
+        });
+      }
+    })();
+  </script>
 </header>

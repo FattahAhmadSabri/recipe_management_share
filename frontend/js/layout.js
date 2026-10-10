@@ -1,8 +1,24 @@
 async function loadComponent(id, file) {
   const response = await fetch(file);
   const html = await response.text();
+  const container = document.getElementById(id);
 
-  document.getElementById(id).innerHTML = html;
+  container.innerHTML = html;
+
+  const scripts = Array.from(container.querySelectorAll("script"));
+
+  scripts.forEach((oldScript) => {
+    const newScript = document.createElement("script");
+
+    if (oldScript.src) {
+      newScript.src = oldScript.src;
+    } else {
+      newScript.textContent = oldScript.textContent;
+    }
+
+    newScript.async = false;
+    oldScript.replaceWith(newScript);
+  });
 }
 
 // Header
