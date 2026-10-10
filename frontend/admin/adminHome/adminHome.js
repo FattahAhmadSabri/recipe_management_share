@@ -5,6 +5,20 @@ logoutLink.addEventListener("click", () => {
   localStorage.removeItem("token");
 });
 
+function escapeHTML(value) {
+  return String(value ?? "").replace(
+    /[&<>"']/g,
+    (character) =>
+      ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#39;",
+      })[character],
+  );
+}
+
 axios
   .get("http://localhost:4500/recipe")
   .then((response) => {
@@ -29,11 +43,17 @@ axios
     }
 
     recentRecipes.forEach((recipe) => {
+      const mainIngredient =
+        recipe.mainIngredient?.name ??
+        recipe.mainIngredientName ??
+        recipe.mainIngredient ??
+        "-";
+
       recipeTable.innerHTML += `
         <tr>
-          <td>${recipe.recipeName || "Untitled"}</td>
-          <td>${recipe.mainIngredient || "-"}</td>
-          <td>${recipe.description || recipe.method || "-"}</td>
+          <td>${escapeHTML(recipe.recipeName || "Untitled")}</td>
+          <td>${escapeHTML(mainIngredient)}</td>
+          <td>${escapeHTML(recipe.description || recipe.method || "-")}</td>
         </tr>
       `;
     });

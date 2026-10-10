@@ -1,89 +1,124 @@
-// const API_URL = "http://localhost:4500/user";
+const API_URL = "http://localhost:4500/user";
 
-// const usersList = document.getElementById("usersList");
-// const loading = document.getElementById("loading");
-// const error = document.getElementById("error");
+const authorsList = document.getElementById("authorsList");
+const loading = document.getElementById("loading");
+const error = document.getElementById("error");
 
-// const getUsers = async () => {
-//   try {
-//     loading.style.display = "block";
-//     error.style.display = "none";
+const authConfig = () => ({
+  headers: {
+    Authorization: `Bearer ${localStorage.getItem("token") || ""}`,
+  },
+});
 
-//     const response = await axios.get(API_URL);
+const normalizeUsers = (payload) => {
+  if (Array.isArray(payload)) {
+    return payload;
+  }
 
-//     console.log("Users API response:", response.data);
+  if (payload && Array.isArray(payload.data)) {
+    return payload.data;
+  }
 
-//     const users = response.data.data;
+  return [];
+};
 
-//     renderUsers(users);
-//   } catch (err) {
-//     console.error("Error getting users:", err);
+const getUserName = (user) => user.name || user.username || "Unknown author";
 
-//     loading.style.display = "none";
+const getUserEmail = (user) => user.email || "No email provided";
 
-//     error.style.display = "block";
+const getAvatarUrl = (name) =>
+  `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=random&color=fff&size=200`;
 
-//     error.textContent = "Unable to load users.";
-//   }
-// };
+const getUsers = async () => {
+  try {
+    loading.style.display = "block";
+    error.style.display = "none";
+    authorsList.innerHTML = "";
 
-// const renderUsers = (users) => {
-//   loading.style.display = "none";
+    const response = await axios.get(API_URL, authConfig());
+    const users = normalizeUsers(response.data);
 
-//   usersList.innerHTML = "";
+    renderAuthors(users);
+  } catch (err) {
+    console.error("Error getting authors:", err);
 
-//   if (!users || users.length === 0) {
-//     usersList.innerHTML = `
-//       <div class="no-users">
-//         No users found.
-//       </div>
-//     `;
+    loading.style.display = "none";
+    error.style.display = "block";
 
-//     return;
-//   }
+    if (err.response?.status === 401) {
+      error.textContent = "Please log in to view authors.";
+      return;
+    }
 
-//   users.forEach((user) => {
-//     const userElement = document.createElement("div");
+    error.textContent = "Unable to load authors right now.";
+  }
+};
 
-//     userElement.className = "user";
+const renderAuthors = (users) => {
+  loading.style.display = "none";
+  authorsList.innerHTML = "";
 
-//     const image = user.profileImage
-//       ? user.profileImage
-//       : "../assets/default-user.png";
+  if (!users || users.length === 0) {
+    authorsList.innerHTML = '<div class="no-authors">No authors found.</div>';
+    return;
+  }
 
-//     const userName = user.username || user.name || "Unknown User";
+  authorsList.innerHTML = users
+    .map((user) => {
+      const userId = user.id || user._id || user.email || "";
+      const userName = getUserName(user);
+      const userEmail = getUserEmail(user);
+      const recipeCount = user.recipeCount || 0;
 
-//     const recipeCount = user.recipeCount || 0;
+      return `
+        <article class="author-card" data-user-id="${userId}" tabindex="0" aria-label="View author ${userName}">
+          <div class="author-avatar">
+            <img
+              src="${getAvatarUrl(userName)}"
+              alt="${userName}"
+              onerror="this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(userName)}&background=random&color=fff&size=200'"
+            />
+          </div>
+          <div class="author-info">
+            <h2 class="author-name">${userName}</h2>
+            <p class="author-email">${userEmail}</p>
+            <p class="author-recipes">Posted Recipes (${recipeCount})</p>
+          </div>
+        </article>
+      `;
+    })
+    .join("");
+};
 
-//     userElement.innerHTML = `
+authorsList.addEventListener("click", (event) => {
+  const card = event.target.closest(".author-card");
 
-//       <div class="user-image">
+  if (!card) {
+    return;
+  }
 
-//         <img
-//           src="${image}"
-//           alt="${userName}"
-//           onerror="this.src='../assets/default-user.png'"
-//         />
+  const userId = card.dataset.userId;
 
-//       </div>
+  if (!userId) {
+    return;
+  }
 
+  console.log("Selected author id:", userId);
+});
 
-//       <div class="user-info">
+authorsList.addEventListener("keydown", (event) => {
+  if (event.key !== "Enter" && event.key !== " ") {
+    return;
+  }
 
-//         <h2 class="user-name">
-//           ${userName}
-//         </h2>
+  const card = event.target.closest(".author-card");
 
-//         <p class="user-recipes">
-//           Posted Recipes (${recipeCount})
-//         </p>
+  if (!card) {
+    return;
+  }
 
-//       </div>
+  event.preventDefault();
+  card.click();
+});
 
-//     `;
-
-//     usersList.appendChild(userElement);
-//   });
-// };
-
-// getUsers();
+getUsers();

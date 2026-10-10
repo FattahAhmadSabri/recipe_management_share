@@ -4,58 +4,101 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Manage Users | Recipe Admin</title>
-    <link rel="stylesheet" href="adminUser.css" />
+    <link rel="stylesheet" href="adminUser.css?v=20261010" />
+    <link rel="stylesheet" href="../adminHome/adminHome.css" />
   </head>
   <body>
     <div class="dashboard">
       <aside class="sidebar">
-        <h2>Recipe Admin</h2>
-
+        <a class="brand" href="../adminHome/adminHome.html">
+          <span class="brand-mark">RS</span>
+          <span class="brand-copy">
+            <strong>Recipe Studio</strong>
+            <small>ADMIN CONSOLE</small>
+          </span>
+        </a>
         <nav>
-          <a href="../adminHome/adminHome.html">Dashboard</a>
-          <a href="../adminHome/adminRecipes.html">Manage Recipes</a>
-          <a href="../adminHome/adminComments.html">Comments &amp; Reviews</a>
-          <a href="../adminHome/adminIngredients.html">Main Ingredients</a>
-          <a href="./adminUser.html" class="active">Manage Users</a>
-          <a href="../../index.html">View Website</a>
+          <span class="nav-section">WORKSPACE</span>
+          <a href="../adminHome/adminHome.html"
+            ><span class="nav-index">01</span> Overview</a
+          >
+          <a href="../adminHome/adminRecipes.html"
+            ><span class="nav-index">02</span> Recipes</a
+          >
+          <a href="../adminHome/adminComments.html"
+            ><span class="nav-index">03</span> Comments &amp; Reviews</a
+          >
+          <a href="../adminHome/adminIngredients.html"
+            ><span class="nav-index">04</span> Main Ingredients</a
+          >
+          <a href="./adminUser.html" class="active"
+            ><span class="nav-index">05</span> Users</a
+          >
+        </nav>
+        <div class="sidebar-footer">
+          <span class="status-dot"></span>
+          <span
+            ><strong>Administrator</strong><small>Workspace access</small></span
+          >
           <a href="../../page/login_register/login.html" id="logoutLink"
             >Logout</a
           >
-        </nav>
+        </div>
       </aside>
 
       <main class="main-content">
-        <header class="topbar">
-          <div>
+        <header class="page-header">
+          <div class="page-title">
+            <p class="eyebrow">ADMIN / PEOPLE</p>
             <h1>Manage Users</h1>
-            <p>View and manage registered users.</p>
+            <p class="page-subtitle">
+              Review accounts and maintain workspace access.
+            </p>
           </div>
-
-          <button id="refreshBtn" class="refresh-btn">Refresh Users</button>
+          <div class="header-actions">
+            <a class="website-link" href="../../index.html"
+              >View website <span aria-hidden="true">&#8599;</span></a
+            >
+            <button id="refreshBtn" class="refresh-btn" type="button">
+              Refresh users
+            </button>
+          </div>
         </header>
 
-        <section class="stats">
+        <section class="stats" aria-label="User overview">
           <div class="stat-card">
-            <span>Total Users</span>
+            <div class="stat-label">
+              <span></span>
+              <h2>Total users</h2>
+            </div>
             <h2 id="totalUsers">0</h2>
+            <small>Registered accounts</small>
           </div>
 
-          <div class="stat-card">
-            <span>Admins</span>
+          <div class="stat-card stat-users">
+            <div class="stat-label">
+              <span></span>
+              <h2>Admins</h2>
+            </div>
             <h2 id="totalAdmins">0</h2>
+            <small>Administrator access</small>
           </div>
 
-          <div class="stat-card">
-            <span>Regular Users</span>
+          <div class="stat-card stat-recent">
+            <div class="stat-label">
+              <span></span>
+              <h2>Regular users</h2>
+            </div>
             <h2 id="regularUsers">0</h2>
+            <small>Community accounts</small>
           </div>
         </section>
 
-        <section class="users-section">
-          <div class="section-header">
+        <section class="content-card">
+          <div class="users-toolbar">
             <div>
-              <h2>All Users</h2>
-              <p>Manage registered accounts</p>
+              <p class="eyebrow">ACCOUNT DIRECTORY</p>
+              <h2>All users</h2>
             </div>
 
             <input

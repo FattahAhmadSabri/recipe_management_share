@@ -128,7 +128,7 @@ async function fetchUsers() {
 
   usersTable.innerHTML = `
     <tr>
-      <td colspan="4" class="table-message">
+      <td colspan="5" class="table-message">
         Loading users...
       </td>
     </tr>
@@ -154,13 +154,18 @@ async function fetchUsers() {
 
     usersTable.innerHTML = `
       <tr>
-        <td colspan="4" class="table-message">
+        <td colspan="5" class="table-message">
           Unable to load users. Check your API route and backend.
         </td>
       </tr>
     `;
 
-    message.textContent = error.response?.data?.message || error.message;
+    message.textContent =
+      error.response?.status === 401
+        ? "Admin sign-in is required. Your session may have expired."
+        : error.response?.status === 403
+          ? "This account does not have admin access."
+          : error.response?.data?.message || error.message;
 
     document.getElementById("totalUsers").textContent = "--";
     document.getElementById("totalAdmins").textContent = "--";

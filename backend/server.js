@@ -12,7 +12,8 @@ const recipeRoute = require("./routes/recipeRoute");
 const mainIngredientRoute = require("./routes/mainIgredientRoutes");
 const recipeTypeRoute = require("./routes/recipeTypeRoute");
 const replyRoute = require("./routes/replyRoute");
-const recentViewRoute =require("./routes/recentViewRoute")
+const recentViewRoute = require("./routes/recentViewRoute");
+const followersRoute = require("./routes/followersRoute");
 
 app.get("/", (req, res) => {
   res.send("server is working");
@@ -23,7 +24,8 @@ app.use("/", recipeRoute);
 app.use("/", mainIngredientRoute);
 app.use("/", recipeTypeRoute);
 app.use("/", replyRoute);
-app.use("/", recentViewRoute)
+app.use("/", recentViewRoute);
+app.use("/", followersRoute);
 sequelize
   .sync()
   .then(() => {

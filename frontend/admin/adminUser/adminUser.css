@@ -74,17 +74,19 @@ body {
 }
 
 .refresh-btn {
-  padding: 12px 18px;
-  background: #287b50;
+  padding: 10px 14px;
+  background: #245449;
   color: white;
   border: none;
-  border-radius: 6px;
+  border-radius: 5px;
   cursor: pointer;
-  font-size: 14px;
+  font: inherit;
+  font-size: 12px;
+  font-weight: 700;
 }
 
 .refresh-btn:hover {
-  background: #20633f;
+  background: #173b34;
 }
 
 .refresh-btn:disabled {
@@ -185,13 +187,13 @@ tbody tr:hover {
 }
 
 .role-admin {
-  color: #2259a6;
-  background: #e7efff;
+  color: #9a4934;
+  background: #f9e9e2;
 }
 
 .role-user {
-  color: #287344;
-  background: #e4f5e9;
+  color: #28634a;
+  background: #e7f1e8;
 }
 
 .role-other {
