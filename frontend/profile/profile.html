@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>My Profile</title>
+    <link rel="stylesheet" href="../css/index.css" />
+    <link rel="stylesheet" href="./profile.css" />
+  </head>
+  <body>
+    <header class="profile-topbar">
+      <div class="brand-wrap">
+        <div class="brand-mark">🍽️</div>
+        <div>
+          <h1>Share Recipes</h1>
+          <p>My Account</p>
+        </div>
+      </div>
+
+      <nav class="top-actions">
+        <a href="../index.html">Home</a>
+        <a href="../page/favorites/favorites.html">Favorites</a>
+        <button id="logoutProfileBtn" type="button" class="secondary-btn">
+          Logout
+        </button>
+      </nav>
+    </header>
+
+    <main class="profile-page">
+      <section class="profile-summary card">
+        <div class="profile-avatar" id="profileAvatar">U</div>
+        <div class="profile-meta">
+          <p class="label">Profile</p>
+          <h2 id="profileName">Loading...</h2>
+          <p id="profileEmail">Please wait</p>
+        </div>
+      </section>
+
+      <section class="profile-recipes card">
+        <div class="section-header">
+          <h3>My Posted Recipes</h3>
+          <button id="refreshRecipesBtn" type="button" class="secondary-btn">
+            Refresh
+          </button>
+        </div>
+
+        <div id="profileStatus" class="status-text">
+          Loading your recipe posts...
+        </div>
+        <div id="profileRecipes" class="recipe-grid"></div>
+      </section>
+    </main>
+
+    <div id="editModal" class="modal hidden" aria-hidden="true">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3>Edit Recipe</h3>
+          <button type="button" id="closeModalBtn" class="close-btn">×</button>
+        </div>
+
+        <form id="editRecipeForm" class="edit-form">
+          <input type="hidden" id="editRecipeId" />
+
+          <div class="field-grid">
+            <label>
+              Recipe Name
+              <input
+                id="editRecipeName"
+                name="recipeName"
+                type="text"
+                required
+              />
+            </label>
+
+            <label>
+              Cuisine
+              <input id="editCuisine" name="cuisine" type="text" />
+            </label>
+
+            <label>
+              Cooking Time
+              <input id="editCookingTime" name="cookingTime" type="text" />
+            </label>
+
+            <label>
+              Serves
+              <input id="editServes" name="serves" type="text" />
+            </label>
+          </div>
+
+          <label>
+            Description
+            <textarea
+              id="editDescription"
+              name="description"
+              rows="3"
+            ></textarea>
+          </label>
+
+          <label>
+            Ingredients
+            <textarea
+              id="editIngredients"
+              name="ingredients"
+              rows="4"
+              required
+            ></textarea>
+          </label>
+
+          <label>
+            Method
+            <textarea
+              id="editMethod"
+              name="method"
+              rows="5"
+              required
+            ></textarea>
+          </label>
+
+          <label>
+            Image (optional)
+            <input id="editImage" name="image" type="file" accept="image/*" />
+          </label>
+
+          <div class="form-actions">
+            <button type="submit" class="primary-btn">Save Changes</button>
+            <button type="button" id="cancelEditBtn" class="button-muted">
+              Cancel
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="./profile.js"></script>
+  </body>
+</html>

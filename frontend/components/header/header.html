@@ -55,6 +55,13 @@
           : "./page/login_register/login.html";
       }
 
+      function getProfilePageUrl() {
+        const isNestedPage = window.location.pathname.includes("/page/");
+        return isNestedPage
+          ? "../../profile/profile.html"
+          : "./profile/profile.html";
+      }
+
       async function loadUserName() {
         const payload = decodeToken();
         const userId = payload?.id || payload?.userId;
@@ -129,6 +136,19 @@
           }
 
           window.location.href = getFavoritePageUrl();
+        });
+      }
+
+      if (myAccountLink) {
+        myAccountLink.addEventListener("click", function (event) {
+          event.preventDefault();
+
+          if (!token) {
+            window.location.href = getLoginPageUrl();
+            return;
+          }
+
+          window.location.href = getProfilePageUrl();
         });
       }
     })();

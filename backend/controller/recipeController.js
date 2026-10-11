@@ -97,7 +97,11 @@ const updateRecipeController = async (req, res) => {
 
 const deleteRecipeController = async (req, res) => {
   try {
-    const response = await deleteRecipeService(req.params.id);
+    const response = await deleteRecipeService(
+      req.params.id,
+      req.user?.id,
+      req.user?.role === "admin",
+    );
     return successResponse(res, 200, "Recipe deleted successfully", response);
   } catch (error) {
     return errorResponse(res, error.statusCode || 500, error.message);

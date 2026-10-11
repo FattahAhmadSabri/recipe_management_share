@@ -171,7 +171,21 @@ const updateRecipeService = async (userId, updates, file, id, isAdmin) => {
   return recipe;
 };
 
-const deleteRecipeService = async (id) => {
+const deleteRecipeService = async (id, userId, isAdmin = false) => {
+  const recipe = await Recipe.findByPk(id);
+
+  if (!recipe) {
+    const error = new Error("Recipe not found");
+    error.statusCode = 404;
+    throw error;
+  }
+
+  if (!isAdmin && recipe.userId !== userId) {
+    const error = new Error("You can only delete your own recipes");
+    error.statusCode = 403;
+    throw error;
+  }
+
   const deletedCount = await Recipe.destroy({ where: { id } });
 
   if (deletedCount === 0) {

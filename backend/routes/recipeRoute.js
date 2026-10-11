@@ -31,11 +31,6 @@ router.put(
   updateRecipeController,
 );
 
-router.delete(
-  "/recipe/:id",
-  authMiddleware,
-  authorizeRoles("admin"),
-  deleteRecipeController,
-);
+router.delete("/recipe/:id", authMiddleware, deleteRecipeController);
 
 module.exports = router;
