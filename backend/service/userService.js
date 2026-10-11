@@ -3,7 +3,12 @@ const { User } = require("../model/index");
 
 const addUserService = async (name, email, password, role) => {
   const hashedPassword = await bcrypt.hash(password, 10);
-  const response = await User.create({ name, email, password: hashedPassword, role });
+  const response = await User.create({
+    name,
+    email,
+    password: hashedPassword,
+    role,
+  });
   return response;
 };
 
@@ -30,16 +35,28 @@ const loginService = async (email, password) => {
 
   return finalUser;
 };
-const updateUserByIdService = (userId, name, password) => {
-  const user = User.update(
-    { name, password },
-    {
-      where: {
-        id: userId,
-      },
-    },
-  );
-  return user;
+const updateUserByIdService = async (userId, name, password) => {
+  const user = await User.findByPk(userId);
+
+  if (!user) {
+    const error = new Error("User not found");
+    error.statusCode = 404;
+    throw error;
+  }
+
+  if (name !== undefined && name !== null && name !== "") {
+    user.name = name;
+  }
+
+  if (password !== undefined && password !== null && password !== "") {
+    user.password = await bcrypt.hash(password, 10);
+  }
+
+  await user.save();
+
+  const response = user.toJSON();
+  delete response.password;
+  return response;
 };
 
 const getAllUsersService = async () => {

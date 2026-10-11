@@ -1,5 +1,21 @@
 const { Favorite, Recipe, User } = require("../model");
 
+const normalizeRecipeImage = (image) => {
+  if (!image) {
+    return "https://placehold.co/600x400/f5f5f5/8b0000?text=Recipe";
+  }
+
+  if (image.startsWith("http://") || image.startsWith("https://")) {
+    return image;
+  }
+
+  if (image.startsWith("recipes/")) {
+    return `https://${process.env.AWS_BUCKET_NAME}.s3.ap-south-1.amazonaws.com/${image}`;
+  }
+
+  return image;
+};
+
 const addFavoriteRecipeService = async (userId, recipeId) => {
   if (!userId || !recipeId) {
     const error = new Error("User id and recipe id are required");
@@ -50,7 +66,7 @@ const deleteFavoriteRecipeService = async (userId, recipeId) => {
 };
 
 const getFavoriteRecipesByUserService = async (userId) => {
-  return Favorite.findAll({
+  const favorites = await Favorite.findAll({
     where: { userId },
     include: [
       {
@@ -66,6 +82,19 @@ const getFavoriteRecipesByUserService = async (userId) => {
       },
     ],
     order: [["createdAt", "DESC"]],
+  });
+
+  return favorites.map((favorite) => {
+    const favoriteJson = favorite.toJSON();
+
+    if (favoriteJson.recipe) {
+      favoriteJson.recipe = {
+        ...favoriteJson.recipe,
+        image: normalizeRecipeImage(favoriteJson.recipe.image),
+      };
+    }
+
+    return favoriteJson;
   });
 };
 

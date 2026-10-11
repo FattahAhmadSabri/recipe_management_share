@@ -11,6 +11,22 @@ const commentStatus = document.getElementById("comment-status");
 const commentsList = document.getElementById("recipe-comments-list");
 let isFavorite = false;
 
+function normalizeRecipeImage(image) {
+  if (!image) {
+    return "https://placehold.co/600x400/f5f5f5/8b0000?text=Recipe";
+  }
+
+  if (image.startsWith("http://") || image.startsWith("https://")) {
+    return image;
+  }
+
+  if (image.startsWith("recipes/")) {
+    return `https://recipe-share-data.s3.ap-south-1.amazonaws.com/${image}`;
+  }
+
+  return image;
+}
+
 function escapeHtml(value) {
   return String(value ?? "").replace(/[&<>\"']/g, (character) => {
     const htmlMap = {
@@ -22,6 +38,71 @@ function escapeHtml(value) {
     };
     return htmlMap[character];
   });
+}
+
+function renderRatingCard(recipe) {
+  const existingRatingBox = document.getElementById("recipe-rating-box");
+  if (existingRatingBox) {
+    existingRatingBox.remove();
+  }
+
+  const averageRating = Number(recipe?.rating || 0);
+  const totalRatings = Number(recipe?.ratingCount || 0);
+  const ratingBox = document.createElement("div");
+  ratingBox.id = "recipe-rating-box";
+  ratingBox.className = "recipe-rating-box";
+
+  const stars = Array.from({ length: 5 }, (_, index) => {
+    const value = index + 1;
+    const isActive = value <= Math.round(averageRating);
+    const star = document.createElement("button");
+    star.type = "button";
+    star.className = `rating-star ${isActive ? "filled" : ""}`;
+    star.dataset.value = String(value);
+    star.setAttribute(
+      "aria-label",
+      `Rate ${value} star${value > 1 ? "s" : ""}`,
+    );
+    star.textContent = isActive ? "★" : "☆";
+    star.addEventListener("click", async () => {
+      const token = localStorage.getItem("token");
+
+      if (!token) {
+        window.location.href = "../login_register/login.html";
+        return;
+      }
+
+      try {
+        const response = await axios.put(
+          `${recipeApi}/${encodeURIComponent(recipeId)}`,
+          { rating: value },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          },
+        );
+
+        const updatedRecipe = response?.data?.data || response?.data;
+        if (updatedRecipe) {
+          renderRatingCard(updatedRecipe);
+        }
+      } catch (error) {
+        alert(error.response?.data?.message || "Unable to save your rating.");
+      }
+    });
+    return star;
+  });
+
+  const ratingSummary = document.createElement("div");
+  ratingSummary.className = "rating-summary";
+  ratingSummary.innerHTML = `
+    <span class="rating-score">${averageRating.toFixed(1)}</span>
+    <span class="rating-count">(${totalRatings} vote${totalRatings === 1 ? "" : "s"})</span>
+  `;
+
+  ratingBox.append(...stars, ratingSummary);
+  detail.append(ratingBox);
 }
 
 function getAuthHeader() {
@@ -231,10 +312,11 @@ if (!recipeId) {
 
       detail.replaceChildren();
 
-      if (imageUrl || recipe.image?.startsWith("http")) {
+      const resolvedImage = normalizeRecipeImage(imageUrl || recipe.image);
+      if (resolvedImage) {
         const image = document.createElement("img");
         image.className = "recipe-detail-image";
-        image.src = imageUrl || recipe.image;
+        image.src = resolvedImage;
         image.alt = recipe.recipeName || "Recipe";
         detail.append(image);
       }
@@ -249,6 +331,8 @@ if (!recipeId) {
       author.className = "recipe-detail-author";
       author.textContent = `By ${authorName}`;
       detail.append(author);
+
+      renderRatingCard(recipe);
 
       const favoriteButton = document.createElement("button");
       favoriteButton.id = "favorite-button";

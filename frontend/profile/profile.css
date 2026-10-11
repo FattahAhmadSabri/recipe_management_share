@@ -119,6 +119,10 @@ a, button, input, textarea {
   border-left: 4px solid var(--primary);
 }
 
+.edit-profile-btn {
+  margin-left: auto;
+}
+
 .profile-avatar {
   width: 76px;
   height: 76px;

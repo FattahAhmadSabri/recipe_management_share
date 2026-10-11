@@ -1,8 +1,29 @@
-const { Recipe, MainIngredient, RecipeType } = require("../model/index");
+const {
+  Recipe,
+  MainIngredient,
+  RecipeType,
+  RecipeRating,
+} = require("../model/index");
 const sequelize = require("../utils/dbConfig");
 const { PutObjectCommand } = require("@aws-sdk/client-s3");
 const s3 = require("../utils/s3Config");
 const { uploadImage } = require("./s3Service");
+
+const normalizeRecipeImage = (image) => {
+  if (!image) {
+    return "https://placehold.co/600x400/f5f5f5/8b0000?text=Recipe";
+  }
+
+  if (image.startsWith("http://") || image.startsWith("https://")) {
+    return image;
+  }
+
+  if (image.startsWith("recipes/")) {
+    return `https://${process.env.AWS_BUCKET_NAME}.s3.ap-south-1.amazonaws.com/${image}`;
+  }
+
+  return image;
+};
 
 const addRecipeService = async (
   recipeName,
@@ -92,9 +113,14 @@ const addRecipeService = async (
       },
     );
 
+    const recipeData = response.toJSON();
+
     await transaction.commit();
 
-    return response;
+    return {
+      ...recipeData,
+      image: normalizeRecipeImage(recipeData.image),
+    };
   } catch (error) {
     await transaction.rollback();
 
@@ -117,7 +143,7 @@ const getRecipeService = async () => {
       ...data,
       mainIngredientName: data.mainIngredient?.name || "",
       recipeTypeName: data.recipeType?.name || "",
-      image: `https://${process.env.AWS_BUCKET_NAME}.s3.ap-south-1.amazonaws.com/${data.image}`,
+      image: normalizeRecipeImage(data.image),
     };
   });
 };
@@ -163,12 +189,54 @@ const updateRecipeService = async (userId, updates, file, id, isAdmin) => {
     }
   }
 
+  if (updates.rating !== undefined) {
+    const ratingValue = Number(updates.rating);
+
+    if (!Number.isFinite(ratingValue) || ratingValue < 1 || ratingValue > 5) {
+      const error = new Error("Rating must be between 1 and 5");
+      error.statusCode = 400;
+      throw error;
+    }
+
+    const existingRating = await RecipeRating.findOne({
+      where: { userId, recipeId: id },
+    });
+
+    if (existingRating) {
+      const error = new Error("You have already rated this recipe.");
+      error.statusCode = 400;
+      throw error;
+    }
+
+    const currentRating = Number(recipe.rating || 0);
+    const currentCount = Number(recipe.ratingCount || 0);
+    const nextCount = currentCount + 1;
+    const nextAverage =
+      currentCount === 0
+        ? ratingValue
+        : (currentRating * currentCount + ratingValue) / nextCount;
+
+    await RecipeRating.create({
+      userId,
+      recipeId: id,
+      value: ratingValue,
+    });
+
+    updateData.rating = Number(nextAverage.toFixed(1));
+    updateData.ratingCount = nextCount;
+  }
+
   if (file) {
     updateData.image = await uploadImage(file);
   }
 
   await recipe.update(updateData);
-  return recipe;
+
+  const recipeData = recipe.toJSON();
+  return {
+    ...recipeData,
+    image: normalizeRecipeImage(recipeData.image),
+  };
 };
 
 const deleteRecipeService = async (id, userId, isAdmin = false) => {

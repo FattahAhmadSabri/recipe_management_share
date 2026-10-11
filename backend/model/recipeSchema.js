@@ -90,6 +90,18 @@ const Recipe = sequelize.define("recipe", {
     allowNull: true,
   },
 
+  rating: {
+    type: DataTypes.FLOAT,
+    allowNull: false,
+    defaultValue: 0,
+  },
+
+  ratingCount: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+    defaultValue: 0,
+  },
+
   image: {
     type: DataTypes.STRING,
     allowNull: true,

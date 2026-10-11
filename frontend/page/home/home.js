@@ -2,6 +2,22 @@ console.log("home.js is running");
 
 const recipeList = document.getElementById("recipe-list");
 
+function normalizeRecipeImage(image) {
+  if (!image) {
+    return "https://placehold.co/600x400/f5f5f5/8b0000?text=Recipe";
+  }
+
+  if (image.startsWith("http://") || image.startsWith("https://")) {
+    return image;
+  }
+
+  if (image.startsWith("recipes/")) {
+    return `https://recipe-share-data.s3.ap-south-1.amazonaws.com/${image}`;
+  }
+
+  return image;
+}
+
 axios
   .get("http://localhost:4500/recipe")
   .then((response) => {
@@ -15,13 +31,14 @@ axios
       const recipeId = encodeURIComponent(recipe.id);
       const imageUrl = encodeURIComponent(recipe.image || "");
 
+      const safeImage = normalizeRecipeImage(recipe.image);
       recipeList.innerHTML += `
         <a
           class="recipe-card"
-          href="./page/home/recipeDetails.html?id=${recipeId}&image=${imageUrl}"
+          href="./page/home/recipeDetails.html?id=${recipeId}&image=${encodeURIComponent(safeImage)}"
         >
           <img
-            src="${escapeHtml(recipe.image)}"
+            src="${escapeHtml(safeImage)}"
             alt="${escapeHtml(recipe.recipeName)}"
             class="recipe-image"
           />

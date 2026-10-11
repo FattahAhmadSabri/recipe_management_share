@@ -29,7 +29,7 @@ app.use("/", recentViewRoute);
 app.use("/", followersRoute);
 app.use("/", favoritesCollectionsRoute);
 sequelize
-  .sync()
+  .sync({ alter: true })
   .then(() => {
     app.listen(port, () => {
       console.log("server is connected");

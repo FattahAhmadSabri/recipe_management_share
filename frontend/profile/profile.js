@@ -4,6 +4,11 @@ const profileName = document.getElementById("profileName");
 const profileEmail = document.getElementById("profileEmail");
 const profileStatus = document.getElementById("profileStatus");
 const profileRecipes = document.getElementById("profileRecipes");
+const profileEditModal = document.getElementById("profileEditModal");
+const editProfileForm = document.getElementById("editProfileForm");
+const editProfileName = document.getElementById("editProfileName");
+const editProfileEmail = document.getElementById("editProfileEmail");
+const editProfilePassword = document.getElementById("editProfilePassword");
 const editModal = document.getElementById("editModal");
 const editRecipeForm = document.getElementById("editRecipeForm");
 
@@ -73,9 +78,86 @@ async function loadCurrentUser() {
   }
 }
 
+function normalizeRecipeImage(image) {
+  if (!image) {
+    return "https://placehold.co/600x400/f5f5f5/8b0000?text=Recipe";
+  }
+
+  if (image.startsWith("http://") || image.startsWith("https://")) {
+    return image;
+  }
+
+  if (image.startsWith("recipes/")) {
+    return `https://recipe-share-data.s3.ap-south-1.amazonaws.com/${image}`;
+  }
+
+  return image;
+}
+
+function openProfileEditModal() {
+  const currentName = profileName.textContent?.trim() || "";
+  const currentEmail = profileEmail.textContent?.trim() || "";
+
+  editProfileName.value = currentName;
+  editProfileEmail.value = currentEmail;
+  editProfilePassword.value = "";
+  profileEditModal.classList.remove("hidden");
+  profileEditModal.setAttribute("aria-hidden", "false");
+}
+
+function closeProfileEditModal() {
+  profileEditModal.classList.add("hidden");
+  profileEditModal.setAttribute("aria-hidden", "true");
+  editProfileForm.reset();
+}
+
+async function saveProfileChanges(event) {
+  event.preventDefault();
+
+  const name = editProfileName.value.trim();
+  const password = editProfilePassword.value.trim();
+
+  if (!name) {
+    alert("Please enter your name.");
+    return;
+  }
+
+  try {
+    const payload = { name };
+    if (password) {
+      payload.password = password;
+    }
+
+    const response = await axios.put(
+      "http://localhost:4500/user/update",
+      payload,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      },
+    );
+
+    const updatedUser = response?.data?.data || response?.data || {};
+    const updatedName = updatedUser.name || name;
+
+    profileName.textContent = updatedName;
+    localStorage.setItem("userName", updatedName);
+    document.getElementById("profileAvatar").textContent =
+      getProfileInitials(updatedName);
+
+    closeProfileEditModal();
+    profileStatus.textContent = "Profile updated successfully.";
+  } catch (error) {
+    console.error("Profile update failed:", error);
+    alert(error.response?.data?.message || "Unable to update profile.");
+  }
+}
+
 function renderRecipeCard(recipe) {
-  const image =
-    recipe.image || "https://placehold.co/600x400/f5f5f5/8b0000?text=Recipe";
+  const image = normalizeRecipeImage(
+    recipe.image || "https://placehold.co/600x400/f5f5f5/8b0000?text=Recipe",
+  );
 
   return `
     <article class="recipe-card">
@@ -259,6 +341,22 @@ document.getElementById("logoutProfileBtn").addEventListener("click", () => {
   localStorage.removeItem("userName");
   window.location.href = "../page/login_register/login.html";
 });
+
+document
+  .getElementById("editProfileBtn")
+  .addEventListener("click", openProfileEditModal);
+document
+  .getElementById("closeProfileEditModalBtn")
+  .addEventListener("click", closeProfileEditModal);
+document
+  .getElementById("cancelProfileEditBtn")
+  .addEventListener("click", closeProfileEditModal);
+profileEditModal.addEventListener("click", (event) => {
+  if (event.target === profileEditModal) {
+    closeProfileEditModal();
+  }
+});
+editProfileForm.addEventListener("submit", saveProfileChanges);
 
 document
   .getElementById("refreshRecipesBtn")

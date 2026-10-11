@@ -6,6 +6,7 @@ const Reply = require("./replySchema");
 const RecentView = require("./recentViewRecipeSchema");
 const Follow = require("./followersSchema");
 const Favorite = require("./favoritesCollectionsSchema");
+const RecipeRating = require("./recipeRatingSchema");
 
 User.hasMany(Recipe, {
   foreignKey: "userId",
@@ -123,6 +124,28 @@ Recipe.belongsToMany(User, {
   as: "favoritedBy",
 });
 
+User.hasMany(RecipeRating, {
+  foreignKey: "userId",
+  as: "recipeRatings",
+  onDelete: "CASCADE",
+});
+
+Recipe.hasMany(RecipeRating, {
+  foreignKey: "recipeId",
+  as: "recipeRatings",
+  onDelete: "CASCADE",
+});
+
+RecipeRating.belongsTo(User, {
+  foreignKey: "userId",
+  as: "user",
+});
+
+RecipeRating.belongsTo(Recipe, {
+  foreignKey: "recipeId",
+  as: "recipe",
+});
+
 module.exports = {
   User,
   Recipe,
@@ -132,4 +155,5 @@ module.exports = {
   RecentView,
   Follow,
   Favorite,
+  RecipeRating,
 };

@@ -34,6 +34,13 @@
           <h2 id="profileName">Loading...</h2>
           <p id="profileEmail">Please wait</p>
         </div>
+        <button
+          id="editProfileBtn"
+          type="button"
+          class="primary-btn edit-profile-btn"
+        >
+          Edit Profile
+        </button>
       </section>
 
       <section class="profile-recipes card">
@@ -50,6 +57,50 @@
         <div id="profileRecipes" class="recipe-grid"></div>
       </section>
     </main>
+
+    <div id="profileEditModal" class="modal hidden" aria-hidden="true">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3>Edit Profile</h3>
+          <button type="button" id="closeProfileEditModalBtn" class="close-btn">
+            ×
+          </button>
+        </div>
+
+        <form id="editProfileForm" class="edit-form">
+          <label>
+            Full Name
+            <input id="editProfileName" name="name" type="text" required />
+          </label>
+
+          <label>
+            Email
+            <input id="editProfileEmail" name="email" type="email" readonly />
+          </label>
+
+          <label>
+            New Password
+            <input
+              id="editProfilePassword"
+              name="password"
+              type="password"
+              placeholder="Leave blank to keep current password"
+            />
+          </label>
+
+          <div class="form-actions">
+            <button type="submit" class="primary-btn">Save Profile</button>
+            <button
+              type="button"
+              id="cancelProfileEditBtn"
+              class="button-muted"
+            >
+              Cancel
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
 
     <div id="editModal" class="modal hidden" aria-hidden="true">
       <div class="modal-content">

@@ -1,6 +1,22 @@
 const statusEl = document.getElementById("favorite-status");
 const listEl = document.getElementById("favorite-list");
 
+function normalizeRecipeImage(image) {
+  if (!image) {
+    return "https://placehold.co/600x400/f5f5f5/8b0000?text=Recipe";
+  }
+
+  if (image.startsWith("http://") || image.startsWith("https://")) {
+    return image;
+  }
+
+  if (image.startsWith("recipes/")) {
+    return `https://recipe-share-data.s3.ap-south-1.amazonaws.com/${image}`;
+  }
+
+  return image;
+}
+
 function getAuthHeader() {
   const token = localStorage.getItem("token");
 
@@ -120,9 +136,10 @@ async function loadFavoriteRecipes() {
           recipe.recipeName || recipe.name || "Untitled recipe";
         const description =
           recipe.description || recipe.method || "No description available.";
-        const image =
+        const image = normalizeRecipeImage(
           recipe.image ||
-          "https://placehold.co/600x400/f5f5f5/8b0000?text=Recipe";
+            "https://placehold.co/600x400/f5f5f5/8b0000?text=Recipe",
+        );
 
         if (!recipeId) {
           return "";

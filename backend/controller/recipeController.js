@@ -136,11 +136,26 @@ const getRecipeByIdController = async (req, res) => {
       return errorResponse(res, 404, "Recipe not found");
     }
 
+    const recipeData = response.toJSON();
+    const normalizedRecipe = {
+      ...recipeData,
+      image: recipeData.image
+        ? recipeData.image.startsWith("http")
+          ? recipeData.image
+          : `https://${process.env.AWS_BUCKET_NAME}.s3.ap-south-1.amazonaws.com/${recipeData.image}`
+        : "https://placehold.co/600x400/f5f5f5/8b0000?text=Recipe",
+    };
+
     await addRecentView(recipeId, userId, ipAddress, transaction);
 
     await transaction.commit();
 
-    return successResponse(res, 200, "Recipe fetched successfully", response);
+    return successResponse(
+      res,
+      200,
+      "Recipe fetched successfully",
+      normalizedRecipe,
+    );
   } catch (error) {
     await transaction.rollback();
 
