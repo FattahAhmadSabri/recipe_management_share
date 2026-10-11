@@ -10,6 +10,7 @@ const {
   updateRecipeService,
   deleteRecipeService,
 } = require("../service/recipeService");
+const { User } = require("../model/index");
 const sequelize = require("../utils/dbConfig");
 
 const addRecipeController = async (req, res) => {
@@ -115,6 +116,13 @@ const getRecipeByIdController = async (req, res) => {
       where: {
         id: recipeId,
       },
+      include: [
+        {
+          model: User,
+          as: "author",
+          attributes: ["id", "name", "email"],
+        },
+      ],
       transaction,
     });
 

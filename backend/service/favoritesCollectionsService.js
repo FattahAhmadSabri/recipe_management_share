@@ -55,9 +55,11 @@ const getFavoriteRecipesByUserService = async (userId) => {
     include: [
       {
         model: Recipe,
+        as: "recipe",
         include: [
           {
             model: User,
+            as: "author",
             attributes: { exclude: ["password"] },
           },
         ],

@@ -41,6 +41,20 @@
         }
       }
 
+      function getFavoritePageUrl() {
+        const isNestedPage = window.location.pathname.includes("/page/");
+        return isNestedPage
+          ? "../favorites/favorites.html"
+          : "./page/favorites/favorites.html";
+      }
+
+      function getLoginPageUrl() {
+        const isNestedPage = window.location.pathname.includes("/page/");
+        return isNestedPage
+          ? "../login_register/login.html"
+          : "./page/login_register/login.html";
+      }
+
       async function loadUserName() {
         const payload = decodeToken();
         const userId = payload?.id || payload?.userId;
@@ -101,7 +115,7 @@
           event.preventDefault();
           localStorage.removeItem("token");
           localStorage.removeItem("userName");
-          window.location.href = "../../page/login_register/login.html";
+          window.location.href = getLoginPageUrl();
         });
       }
 
@@ -110,11 +124,11 @@
           event.preventDefault();
 
           if (!token) {
-            window.location.href = "../../page/login_register/login.html";
+            window.location.href = getLoginPageUrl();
             return;
           }
 
-          window.location.href = "../../page/favorites/favorites.html";
+          window.location.href = getFavoritePageUrl();
         });
       }
     })();

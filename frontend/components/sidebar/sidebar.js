@@ -4,7 +4,23 @@
 
 // Get Main Ingredients
 
-const api = "http://localhost:4500"
+const api = "http://localhost:4500";
+
+const filterRecipeCardsByName = () => {
+  const searchInput = document.getElementById("searchRecipe");
+  if (!searchInput) return;
+
+  const query = searchInput.value.trim().toLowerCase();
+  const recipeCards = document.querySelectorAll(".recipe-card");
+
+  recipeCards.forEach((card) => {
+    const title =
+      card.querySelector(".recipe-title")?.textContent?.trim() || "";
+    const shouldShow = !query || title.toLowerCase().includes(query);
+    card.style.display = shouldShow ? "" : "none";
+  });
+};
+
 const getMainIngredients = async () => {
   try {
     const response = await axios.get(`${api}/main`);
@@ -62,13 +78,22 @@ const getRecipeTypes = async () => {
   }
 };
 
+const bindSidebarSearch = () => {
+  const searchInput = document.getElementById("searchRecipe");
+  if (!searchInput) return;
+
+  searchInput.addEventListener("input", filterRecipeCardsByName);
+};
+
 // Initialize sidebar - Call APIs when component is ready
 if (document.readyState === "loading") {
   document.addEventListener("DOMContentLoaded", () => {
+    bindSidebarSearch();
     getMainIngredients();
     getRecipeTypes();
   });
 } else {
+  bindSidebarSearch();
   getMainIngredients();
   getRecipeTypes();
 }

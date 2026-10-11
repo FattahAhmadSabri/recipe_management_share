@@ -1,150 +1,86 @@
 <div class="search-page">
-
   <h1>Search</h1>
 
   <div class="recipe-finder">
-
     <h2>Recipe Finder</h2>
 
     <!-- Simple Search -->
     <div class="search-row">
       <label for="searchInput">Search for</label>
 
-      <input
-        type="text"
-        id="searchInput"
-      />
+      <input type="text" id="searchInput" />
 
       <button id="searchButton">Go</button>
     </div>
 
-
     <!-- Advanced Search -->
     <div class="advanced-search">
-
       <h3>Advanced Recipe search</h3>
 
-      <button type="button" id="clearButton">
-        Clear All
-      </button>
-
+      <button type="button" id="clearButton">Clear All</button>
 
       <!-- Cuisine -->
       <div class="form-row">
-
-        <label for="cuisine">
-          Cuisine :
-        </label>
+        <label for="cuisine"> Cuisine : </label>
 
         <select id="cuisine">
           <option value="">Please select</option>
         </select>
-
       </div>
-
 
       <!-- Main Ingredients -->
       <div class="form-row">
+        <label for="mainIngredients"> Main Ingredients: </label>
 
-        <label for="mainIngredients">
-          Main Ingredients:
-        </label>
+        <select id="mainIngredients" multiple>
+          <option disabled>Select Main Ingredient</option>
 
-        <select
-          id="mainIngredients"
-          multiple
-        >
-          <option disabled>
-            Select Main Ingredient
-          </option>
+          <option value="Beans/Pulses">Beans/Pulses</option>
 
-          <option value="Beans/Pulses">
-            Beans/Pulses
-          </option>
+          <option value="Beef">Beef</option>
 
-          <option value="Beef">
-            Beef
-          </option>
+          <option value="Cheese/Paneer/Tofu">Cheese/Paneer/Tofu</option>
 
-          <option value="Cheese/Paneer/Tofu">
-            Cheese/Paneer/Tofu
-          </option>
+          <option value="Chicken">Chicken</option>
 
-          <option value="Chicken">
-            Chicken
-          </option>
+          <option value="Dairy">Dairy</option>
 
-          <option value="Dairy">
-            Dairy
-          </option>
-
-          <option value="Egg">
-            Egg
-          </option>
+          <option value="Egg">Egg</option>
         </select>
-
       </div>
-
 
       <!-- Recipe Types -->
       <div class="form-row">
+        <label for="recipeTypes"> Recipe Types: </label>
 
-        <label for="recipeTypes">
-          Recipe Types:
-        </label>
+        <select id="recipeTypes" multiple>
+          <option disabled>Select Recipe Type</option>
 
-        <select
-          id="recipeTypes"
-          multiple
-        >
-          <option disabled>
-            Select Recipe Type
-          </option>
+          <option value="Baking">Baking</option>
 
-          <option value="Baking">
-            Baking
-          </option>
+          <option value="Beverages">Beverages</option>
 
-          <option value="Beverages">
-            Beverages
-          </option>
+          <option value="Bread">Bread</option>
 
-          <option value="Bread">
-            Bread
-          </option>
+          <option value="Breakfast">Breakfast</option>
 
-          <option value="Breakfast">
-            Breakfast
-          </option>
+          <option value="Dessert">Dessert</option>
 
-          <option value="Dessert">
-            Dessert
-          </option>
-
-          <option value="Dinner">
-            Dinner
-          </option>
+          <option value="Dinner">Dinner</option>
         </select>
-
       </div>
-
 
       <!-- Tags -->
       <div class="form-row">
+        <label for="tags"> Tags: </label>
 
-        <label for="tags">
-          Tags:
-        </label>
-
-        <input
-          type="text"
-          id="tags"
-        />
-
+        <input type="text" id="tags" />
       </div>
-
     </div>
-
   </div>
 
+  <div id="search-results" class="search-results" aria-live="polite"></div>
 </div>
+
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script src="./search.js"></script>

@@ -66,10 +66,11 @@ async function loadFavoriteStatus() {
       "http://localhost:4500/favorites/me",
       auth,
     );
-    const favorites = response?.data?.data || [];
+    const data = response?.data?.data ?? response?.data ?? [];
+    const favorites = Array.isArray(data) ? data : [];
 
     isFavorite = favorites.some(
-      (item) => String(item.recipeId) === String(recipeId),
+      (item) => String(item.recipeId ?? item.recipe?.id) === String(recipeId),
     );
 
     const favoriteButton = document.getElementById("favorite-button");
@@ -103,20 +104,19 @@ async function toggleFavorite() {
         `${favoritesApi}/${encodeURIComponent(recipeId)}`,
         auth,
       );
-      isFavorite = false;
     } else {
       await axios.post(
         `${favoritesApi}/${encodeURIComponent(recipeId)}`,
         {},
         auth,
       );
-      isFavorite = true;
     }
 
-    favoriteButton.textContent = isFavorite
-      ? "Remove from Favorite Collection"
-      : "Add to Favorite Collection";
-    favoriteButton.classList.toggle("is-favorite", isFavorite);
+    await loadFavoriteStatus();
+    const refreshedButton = document.getElementById("favorite-button");
+    if (refreshedButton) {
+      refreshedButton.classList.toggle("is-favorite", isFavorite);
+    }
   } catch (error) {
     console.error("Favorite toggle failed:", error);
     alert(error.response?.data?.message || "Unable to update favorites.");
@@ -147,12 +147,11 @@ async function renderComments() {
     }
 
     commentsList.innerHTML = comments
-      .map(
-        (comment) => {
-          const userName =
-            comment?.user?.name || comment?.user?.email || "Unknown user";
+      .map((comment) => {
+        const userName =
+          comment?.user?.name || comment?.user?.email || "Unknown user";
 
-          return `
+        return `
             <article class="recipe-comment-item">
               <div class="recipe-comment-header">
                 <strong>${escapeHtml(userName)}</strong>
@@ -161,8 +160,7 @@ async function renderComments() {
               <p>${escapeHtml(comment.reply || "")}</p>
             </article>
           `;
-        },
-      )
+      })
       .join("");
   } catch (error) {
     commentsList.innerHTML =
@@ -245,6 +243,12 @@ if (!recipeId) {
       title.className = "recipe-detail-title";
       title.textContent = recipe.recipeName || "Recipe details";
       detail.append(title);
+
+      const authorName = recipe?.author?.name || "Unknown author";
+      const author = document.createElement("p");
+      author.className = "recipe-detail-author";
+      author.textContent = `By ${authorName}`;
+      detail.append(author);
 
       const favoriteButton = document.createElement("button");
       favoriteButton.id = "favorite-button";

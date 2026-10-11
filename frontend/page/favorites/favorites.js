@@ -29,6 +29,28 @@ function escapeHtml(value) {
   });
 }
 
+function extractFavoriteRecipes(payload) {
+  const source = payload?.data ?? payload ?? [];
+
+  if (Array.isArray(source)) {
+    return source;
+  }
+
+  if (Array.isArray(source?.favorites)) {
+    return source.favorites;
+  }
+
+  if (Array.isArray(source?.favoriteRecipes)) {
+    return source.favoriteRecipes;
+  }
+
+  if (Array.isArray(source?.items)) {
+    return source.items;
+  }
+
+  return [];
+}
+
 async function removeFavorite(recipeId, button) {
   const auth = getAuthHeader();
 
@@ -73,7 +95,7 @@ async function loadFavoriteRecipes() {
       "http://localhost:4500/favorites/me",
       auth,
     );
-    const favorites = response?.data?.data || [];
+    const favorites = extractFavoriteRecipes(response?.data);
 
     if (!favorites.length) {
       statusEl.textContent = "Your favorite collection is empty.";
@@ -86,14 +108,25 @@ async function loadFavoriteRecipes() {
 
     listEl.innerHTML = favorites
       .map((item) => {
-        const recipe = item.recipe || item.Recipe || {};
-        const recipeId = recipe.id || item.recipeId;
-        const recipeName = recipe.recipeName || "Untitled recipe";
+        const recipe =
+          item.recipe ||
+          item.Recipe ||
+          item.dataValues?.recipe ||
+          item.dataValues?.Recipe ||
+          {};
+        const recipeId =
+          recipe.id || item.recipeId || item.dataValues?.recipeId || "";
+        const recipeName =
+          recipe.recipeName || recipe.name || "Untitled recipe";
         const description =
           recipe.description || recipe.method || "No description available.";
         const image =
           recipe.image ||
           "https://placehold.co/600x400/f5f5f5/8b0000?text=Recipe";
+
+        if (!recipeId) {
+          return "";
+        }
 
         return `
           <div class="favorite-item">
@@ -112,7 +145,14 @@ async function loadFavoriteRecipes() {
           </div>
         `;
       })
+      .filter(Boolean)
       .join("");
+
+    if (!listEl.innerHTML.trim()) {
+      statusEl.textContent = "Your favorite collection is empty.";
+      listEl.innerHTML =
+        '<div class="favorite-empty">No favorite recipes yet.</div>';
+    }
 
     listEl.querySelectorAll(".remove-favorite-btn").forEach((button) => {
       button.addEventListener("click", (event) => {

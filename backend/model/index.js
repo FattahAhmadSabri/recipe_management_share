@@ -87,6 +87,28 @@ Follow.belongsTo(User, {
   as: "followingUser",
 });
 
+User.hasMany(Favorite, {
+  foreignKey: "userId",
+  as: "favoriteEntries",
+  onDelete: "CASCADE",
+});
+
+Recipe.hasMany(Favorite, {
+  foreignKey: "recipeId",
+  as: "favoriteEntries",
+  onDelete: "CASCADE",
+});
+
+Favorite.belongsTo(User, {
+  foreignKey: "userId",
+  as: "user",
+});
+
+Favorite.belongsTo(Recipe, {
+  foreignKey: "recipeId",
+  as: "recipe",
+});
+
 User.belongsToMany(Recipe, {
   through: Favorite,
   foreignKey: "userId",

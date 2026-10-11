@@ -119,6 +119,13 @@
   font-weight: normal;
 }
 
+.recipe-detail-author {
+  margin: -8px 0 18px;
+  color: #555;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 18px;
+}
+
 .favorite-btn {
   display: inline-flex;
   align-items: center;
