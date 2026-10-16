@@ -126,11 +126,30 @@
   font-size: 18px;
 }
 
+.favorite-collection-actions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 12px 0 20px;
+}
+
+.favorite-collection-actions select {
+  min-width: 190px;
+  max-width: 100%;
+  padding: 11px 12px;
+  border: 1px solid #aaa;
+  border-radius: 4px;
+  background: #fff;
+  color: #333;
+  font: inherit;
+}
+
 .favorite-btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  margin: 12px 0 20px;
+  margin: 0;
   padding: 12px 18px;
   border: none;
   border-radius: 999px;
@@ -152,7 +171,21 @@
 
 .favorite-btn:disabled {
   opacity: 0.75;
-  cursor: wait;
+  cursor: not-allowed;
+}
+
+.favorite-collection-status {
+  flex-basis: 100%;
+  margin: 0;
+  color: #555;
+  font-size: 14px;
+}
+
+.manage-collections-link {
+  color: #8b0000;
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 3px;
 }
 
 .recipe-rating-box {

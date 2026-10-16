@@ -15,6 +15,7 @@ const replyRoute = require("./routes/replyRoute");
 const recentViewRoute = require("./routes/recentViewRoute");
 const followersRoute = require("./routes/followersRoute");
 const favoritesCollectionsRoute = require("./routes/favoritesCollectionsRoute");
+const collectionsRoute = require("./routes/collectionsRoute");
 
 app.get("/", (req, res) => {
   res.send("server is working");
@@ -28,6 +29,7 @@ app.use("/", replyRoute);
 app.use("/", recentViewRoute);
 app.use("/", followersRoute);
 app.use("/", favoritesCollectionsRoute);
+app.use("/", collectionsRoute);
 sequelize
   .sync({ alter: true })
   .then(() => {

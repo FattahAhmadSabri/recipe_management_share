@@ -1,5 +1,4 @@
 const {
-  addFavoriteRecipeService,
   deleteFavoriteRecipeService,
   getFavoriteRecipesByUserService,
 } = require("../service/favoritesCollectionsService");
@@ -7,18 +6,6 @@ const {
   successResponse,
   errorResponse,
 } = require("../middleware/responseHandlingMiddleware");
-
-const addFavoriteRecipeController = async (req, res) => {
-  try {
-    const userId = req.user.id;
-    const recipeId = req.params.recipeId || req.body.recipeId;
-
-    const response = await addFavoriteRecipeService(userId, recipeId);
-    return successResponse(res, 201, "Recipe added to favorites", response);
-  } catch (error) {
-    return errorResponse(res, error.statusCode || 500, error.message);
-  }
-};
 
 const deleteFavoriteRecipeController = async (req, res) => {
   try {
@@ -53,7 +40,6 @@ const getFavoriteRecipesController = async (req, res) => {
 };
 
 module.exports = {
-  addFavoriteRecipeController,
   deleteFavoriteRecipeController,
   getFavoriteRecipesController,
 };

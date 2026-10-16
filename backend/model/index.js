@@ -7,6 +7,7 @@ const RecentView = require("./recentViewRecipeSchema");
 const Follow = require("./followersSchema");
 const Favorite = require("./favoritesCollectionsSchema");
 const RecipeRating = require("./recipeRatingSchema");
+const Collection = require("./collectionFolderSchema");
 
 User.hasMany(Recipe, {
   foreignKey: "userId",
@@ -94,10 +95,32 @@ User.hasMany(Favorite, {
   onDelete: "CASCADE",
 });
 
+User.hasMany(Collection, {
+  foreignKey: "userId",
+  as: "collections",
+  onDelete: "CASCADE",
+});
+
+Collection.belongsTo(User, {
+  foreignKey: "userId",
+  as: "user",
+});
+
 Recipe.hasMany(Favorite, {
   foreignKey: "recipeId",
   as: "favoriteEntries",
   onDelete: "CASCADE",
+});
+
+Collection.hasMany(Favorite, {
+  foreignKey: "collectionId",
+  as: "favorites",
+  onDelete: "SET NULL",
+});
+
+Favorite.belongsTo(Collection, {
+  foreignKey: "collectionId",
+  as: "collection",
 });
 
 Favorite.belongsTo(User, {
@@ -156,4 +179,5 @@ module.exports = {
   Follow,
   Favorite,
   RecipeRating,
+  Collection,
 };

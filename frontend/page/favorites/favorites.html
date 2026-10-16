@@ -15,6 +15,27 @@
 
       <h1 class="favorite-page-title">Favorite Collection</h1>
 
+      <form id="create-collection-form" class="collection-create-form">
+        <label class="visually-hidden" for="new-collection-name"
+          >Collection name</label
+        >
+        <input
+          id="new-collection-name"
+          name="name"
+          type="text"
+          maxlength="100"
+          placeholder="Create a collection"
+          required
+        />
+        <button type="submit">Create collection</button>
+      </form>
+
+      <nav
+        id="collection-list"
+        class="collection-list"
+        aria-label="Favorite collections"
+      ></nav>
+      <h2 id="selected-collection-name" class="selected-collection-name"></h2>
       <div id="favorite-status" class="favorite-status">
         Loading favorite recipes...
       </div>

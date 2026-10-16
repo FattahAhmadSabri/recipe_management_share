@@ -1,5 +1,5 @@
 const recipeApi = "http://localhost:4500/recipe";
-const favoritesApi = "http://localhost:4500/favorite";
+const collectionsApi = "http://localhost:4500/collections";
 const replyApi = "http://localhost:4500/reply";
 const params = new URLSearchParams(window.location.search);
 const recipeId = params.get("id");
@@ -10,6 +10,7 @@ const commentInput = document.getElementById("comment-input");
 const commentStatus = document.getElementById("comment-status");
 const commentsList = document.getElementById("recipe-comments-list");
 let isFavorite = false;
+let recipeCollections = [];
 
 function normalizeRecipeImage(image) {
   if (!image) {
@@ -137,32 +138,80 @@ function addDetailSection(label, value) {
 
 async function loadFavoriteStatus() {
   const auth = getAuthHeader();
+  const collectionSelect = document.getElementById(
+    "favorite-collection-select",
+  );
+  const favoriteButton = document.getElementById("favorite-button");
+  const status = document.getElementById("favorite-collection-status");
 
   if (!auth) {
+    if (status)
+      status.textContent = "Log in to save this recipe to a collection.";
     return;
   }
 
   try {
-    const response = await axios.get(
-      "http://localhost:4500/favorites/me",
-      auth,
-    );
-    const data = response?.data?.data ?? response?.data ?? [];
-    const favorites = Array.isArray(data) ? data : [];
+    const response = await axios.get(`${collectionsApi}/me`, auth);
+    recipeCollections = response?.data?.data || [];
+    const selectedId = collectionSelect?.value;
 
-    isFavorite = favorites.some(
-      (item) => String(item.recipeId ?? item.recipe?.id) === String(recipeId),
-    );
-
-    const favoriteButton = document.getElementById("favorite-button");
-    if (favoriteButton) {
-      favoriteButton.textContent = isFavorite
-        ? "Remove from Favorite Collection"
-        : "Add to Favorite Collection";
-      favoriteButton.classList.toggle("is-favorite", isFavorite);
+    if (collectionSelect) {
+      collectionSelect.innerHTML = recipeCollections
+        .map(
+          (collection) =>
+            `<option value="${escapeHtml(collection.id)}">${escapeHtml(collection.name)}</option>`,
+        )
+        .join("");
+      if (
+        recipeCollections.some(
+          (collection) => String(collection.id) === String(selectedId),
+        )
+      ) {
+        collectionSelect.value = selectedId;
+      }
     }
+
+    updateCollectionSaveButton();
   } catch (error) {
     console.warn("Unable to load favorite status:", error);
+    if (status) {
+      status.textContent =
+        error.response?.data?.message || "Unable to load collections.";
+    }
+  }
+}
+
+function updateCollectionSaveButton() {
+  const collectionSelect = document.getElementById(
+    "favorite-collection-select",
+  );
+  const favoriteButton = document.getElementById("favorite-button");
+  const status = document.getElementById("favorite-collection-status");
+  const selectedCollection = recipeCollections.find(
+    (collection) => String(collection.id) === String(collectionSelect?.value),
+  );
+
+  isFavorite = Boolean(
+    selectedCollection?.favorites?.some(
+      (favorite) =>
+        String(favorite.recipeId ?? favorite.recipe?.id) === String(recipeId),
+    ),
+  );
+
+  if (favoriteButton) {
+    favoriteButton.disabled = !selectedCollection || isFavorite;
+    favoriteButton.textContent = isFavorite
+      ? "Already in collection"
+      : "Add to collection";
+    favoriteButton.classList.toggle("is-favorite", isFavorite);
+  }
+
+  if (status) {
+    status.textContent = selectedCollection
+      ? isFavorite
+        ? `Saved in ${selectedCollection.name}.`
+        : "Choose a collection for this recipe."
+      : "Create a collection on the favorites page first.";
   }
 }
 
@@ -175,36 +224,31 @@ async function toggleFavorite() {
   }
 
   const favoriteButton = document.getElementById("favorite-button");
+  const collectionSelect = document.getElementById(
+    "favorite-collection-select",
+  );
+  const collectionId = collectionSelect?.value;
+
+  if (!collectionId || isFavorite) return;
 
   try {
     favoriteButton.disabled = true;
-    favoriteButton.textContent = isFavorite ? "Updating..." : "Saving...";
-
-    if (isFavorite) {
-      await axios.delete(
-        `${favoritesApi}/${encodeURIComponent(recipeId)}`,
-        auth,
-      );
-    } else {
-      await axios.post(
-        `${favoritesApi}/${encodeURIComponent(recipeId)}`,
-        {},
-        auth,
-      );
-    }
-
+    favoriteButton.textContent = "Saving...";
+    await axios.post(
+      `${collectionsApi}/${encodeURIComponent(collectionId)}/recipes/${encodeURIComponent(recipeId)}`,
+      {},
+      auth,
+    );
     await loadFavoriteStatus();
-    const refreshedButton = document.getElementById("favorite-button");
-    if (refreshedButton) {
-      refreshedButton.classList.toggle("is-favorite", isFavorite);
-    }
   } catch (error) {
-    console.error("Favorite toggle failed:", error);
-    alert(error.response?.data?.message || "Unable to update favorites.");
-  } finally {
-    if (favoriteButton) {
-      favoriteButton.disabled = false;
+    console.error("Adding recipe to collection failed:", error);
+    const status = document.getElementById("favorite-collection-status");
+    if (status) {
+      status.textContent =
+        error.response?.data?.message || "Unable to save to collection.";
     }
+  } finally {
+    updateCollectionSaveButton();
   }
 }
 
@@ -334,13 +378,40 @@ if (!recipeId) {
 
       renderRatingCard(recipe);
 
+      const collectionActions = document.createElement("div");
+      collectionActions.className = "favorite-collection-actions";
+      const collectionSelect = document.createElement("select");
+      collectionSelect.id = "favorite-collection-select";
+      collectionSelect.setAttribute(
+        "aria-label",
+        "Choose a favorite collection",
+      );
+      collectionSelect.addEventListener("change", updateCollectionSaveButton);
+
       const favoriteButton = document.createElement("button");
       favoriteButton.id = "favorite-button";
       favoriteButton.type = "button";
       favoriteButton.className = "favorite-btn";
-      favoriteButton.textContent = "Add to Favorite Collection";
+      favoriteButton.textContent = "Add to collection";
       favoriteButton.addEventListener("click", toggleFavorite);
-      detail.append(favoriteButton);
+
+      const collectionStatus = document.createElement("p");
+      collectionStatus.id = "favorite-collection-status";
+      collectionStatus.className = "favorite-collection-status";
+      collectionStatus.setAttribute("aria-live", "polite");
+
+      const manageCollections = document.createElement("a");
+      manageCollections.className = "manage-collections-link";
+      manageCollections.href = "../favorites/favorites.html";
+      manageCollections.textContent = "Manage collections";
+
+      collectionActions.append(
+        collectionSelect,
+        favoriteButton,
+        collectionStatus,
+        manageCollections,
+      );
+      detail.append(collectionActions);
 
       addDetailSection("Description", recipe.description);
       addDetailSection("Ingredients", recipe.ingredients);

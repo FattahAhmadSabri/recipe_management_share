@@ -19,15 +19,19 @@ const Favorite = sequelize.define(
       type: DataTypes.UUID,
       allowNull: false,
     },
+    collectionId: {
+      type: DataTypes.UUID,
+      allowNull: true,
+    },
   },
   {
     indexes: [
       {
         unique: true,
-        fields: ["userId", "recipeId"],
+        fields: ["collectionId", "recipeId"],
       },
     ],
-  }
+  },
 );
 
 module.exports = Favorite;
